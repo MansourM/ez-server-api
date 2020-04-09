@@ -25,6 +25,6 @@ android {
 
 dependencies {
     //ION
-    implementation 'com.koushikdutta.ion:ion:2.+'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.koushikdutta.ion:ion:3.0.8'
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
