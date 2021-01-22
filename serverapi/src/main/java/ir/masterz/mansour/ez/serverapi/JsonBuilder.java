@@ -15,6 +15,16 @@ public class JsonBuilder {
         return this;
     }
 
+    public JsonBuilder add(String key, int value) {
+        jo.addProperty(key, value);
+        return this;
+    }
+
+    public JsonBuilder add(String key, boolean value) {
+        jo.addProperty(key, value);
+        return this;
+    }
+
     public JsonObject build() {
         return jo;
     }

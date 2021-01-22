@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 public class ApiServer {
 
-    private String TAG = "api_server";
+    private static String TAG = "api_server";
+    private static boolean LOGGING_ENABLED = false;
 
     private static final int RETRY_COUNT = 3; //2+1 = 3 in total
 
@@ -22,17 +23,28 @@ public class ApiServer {
 
     public ApiServer(Context context) {
         app_context = context;
-        retriesLeft = RETRY_COUNT-1;
+        retriesLeft = RETRY_COUNT - 1;
         Requests = new ArrayList<>();
+    }
+
+    public static void setLogging(boolean isEnabled) {
+        LOGGING_ENABLED = isEnabled;
+    }
+
+    public static void setLoggingTag(String tag) {
+        TAG = tag;
+    }
+
+    private static void log(String msg) {
+        if (LOGGING_ENABLED)
+            Log.d(TAG, msg);
     }
 
 
     private void retry() {
-        Log.d(TAG, "in retry");
-
         retriesLeft--;
         if (retriesLeft > 0) {
-            Log.d(TAG, "Retrying, Retries Left :" + retriesLeft);
+            log("Retrying, Retries Left :" + retriesLeft);
             connect();
         } else {
             retriesLeft = RETRY_COUNT;
@@ -60,47 +72,44 @@ public class ApiServer {
     }
 
     public RequestBuilder addRequestToQue(String url) {
-        return new RequestBuilder(url,this);
+        return new RequestBuilder(url, this);
     }
 
     public void checkDuplicates(Request request) {
         for (Request req : Requests)
             if (req.equals(request)) {
-                Log.d("server api", "duplicate addRequestToQue = " + req.getRequestUrl());
+                log("duplicate request removed = " + req.getRequestUrl());
                 return;
             }
 
         Requests.add(request);
         if (Requests.size() > 1)
-            Log.d("server api", "api is busy addRequestToQue added to que req url = " + request.getRequestUrl());
+            log("api is busy, adding request to que, req url = " + request.getRequestUrl());
         else
             connect();
     }
 
     private void requestCompleted() {
-
-        final String request = Requests.get(0).getRequestJason().toString();
-
         Requests.remove(0);
         if (Requests.size() > 0)
             connect();
         else
-            Log.d("api", "addRequestToQue que done");
+            log("request que done!");
     }
 
     private void connect() {
 
         if (Requests.size() < 1) {
-            Log.d("server api", "not addRequestToQue but in connect!!?");
+            log("Error, not no request remaining, but in connect!!?");
             return;
         }
 
         String token = Requests.get(0).getToken();
 
-        Log.d(TAG, "in Connect");
-        Log.d(TAG, "url= " + Requests.get(0).getRequestUrl());
-        Log.d(TAG, "Token= " + token);
-        Log.d(TAG, "Request Json= " + Requests.get(0).getRequestJason());
+        log("in Connect");
+        log("url= " + Requests.get(0).getRequestUrl());
+        log("Token= " + token);
+        log("Request Json= " + Requests.get(0).getRequestJason());
 
         Ion.with(app_context)
                 .load(Requests.get(0).getRequestUrl())
@@ -110,16 +119,15 @@ public class ApiServer {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        Log.d(TAG, "Json connect Completed!");
+                        log("Json connect Completed!");
                         if (e != null) {
-                            Log.d(TAG, "" + e.getMessage());
-                            Log.d(TAG, "fail res: " + result
-                            );
+                            log("" + e.getMessage());
+                            log("fail res: " + result);
                             e.printStackTrace();
                             retry();
                         } else {
                             Requests.get(0).setResponseJason(result);
-                            Log.d(TAG, "response Json= " + Requests.get(0).getResponseJason());
+                            log("response Json= " + Requests.get(0).getResponseJason());
                             Requests.get(0).getCustomCallback().onResponse();
                             if (getStatus() != 0)
                                 Requests.get(0).getCustomCallback().onSuccess(getMessage(), getData());
