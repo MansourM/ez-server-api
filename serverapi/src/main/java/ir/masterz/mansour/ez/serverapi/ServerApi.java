@@ -9,35 +9,30 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
-public class ApiServer {
+public class ServerApi {
 
-    private static String TAG = "api_server";
-    private static boolean LOGGING_ENABLED = false;
 
-    private static final int RETRY_COUNT = 3; //2+1 = 3 in total
+    private final Context app_context;
 
-    private ArrayList<Request> Requests;
+    private final ArrayList<Request> Requests;
+
+    private final Config Config;
     private int retriesLeft;
-    private Context app_context;
 
-
-    public ApiServer(Context context) {
+    public ServerApi(Context context) {
         app_context = context;
-        retriesLeft = RETRY_COUNT - 1;
+        Config = new Config();
+        retriesLeft = Config.getRetryCount();
         Requests = new ArrayList<>();
     }
 
-    public static void setLogging(boolean isEnabled) {
-        LOGGING_ENABLED = isEnabled;
+    public Config getConfig() {
+        return Config;
     }
 
-    public static void setLoggingTag(String tag) {
-        TAG = tag;
-    }
-
-    private static void log(String msg) {
-        if (LOGGING_ENABLED)
-            Log.d(TAG, msg);
+    private void log(String msg) {
+        if (Config.loggingEnabled())
+            Log.d(Config.getLoggingTag(), msg);
     }
 
 
@@ -47,7 +42,7 @@ public class ApiServer {
             log("Retrying, Retries Left :" + retriesLeft);
             connect();
         } else {
-            retriesLeft = RETRY_COUNT;
+            retriesLeft = Config.getRetryCount();
             Requests.get(0).getCustomCallback().onResponse();
             Requests.get(0).getCustomCallback().onFailure();
             requestCompleted();
@@ -71,16 +66,27 @@ public class ApiServer {
         }
     }
 
-    public RequestBuilder addRequestToQue(String url) {
-        return new RequestBuilder(url, this);
+    public RequestBuilder request(String url) {
+        return new RequestBuilder(url, new CallBackRequestBuilt() {
+            @Override
+            public void requestBuilt(Request request) {
+                addRequestToQue(request);
+            }
+        });
     }
 
-    public void checkDuplicates(Request request) {
+    private boolean isDuplicate(Request request) {
         for (Request req : Requests)
             if (req.equals(request)) {
                 log("duplicate request removed = " + req.getRequestUrl());
-                return;
+                return true;
             }
+        return false;
+    }
+
+    private void addRequestToQue(Request request) {
+        if (!Config.allowDuplicateRequests() || isDuplicate(request))
+            return;
 
         Requests.add(request);
         if (Requests.size() > 1)

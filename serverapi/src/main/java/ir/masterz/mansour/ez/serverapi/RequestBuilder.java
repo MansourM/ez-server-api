@@ -8,15 +8,15 @@ import com.google.gson.JsonObject;
 
 public class RequestBuilder {
 
-    private Request request;
-    private ApiServer sapi;
+    private final Request request;
+    private CallBackRequestBuilt Callback;
 
     public RequestBuilder(String url) {
         request = new Request(url);
     }
 
-    public RequestBuilder(String url, ApiServer api) {
-        sapi = api;
+    public RequestBuilder(String url, CallBackRequestBuilt callback) {
+        Callback = callback;
         request = new Request(url);
     }
 
@@ -39,7 +39,7 @@ public class RequestBuilder {
 
     public void setCustomCallback(ListenerServerApi customCallback) {
         request.setCustomCallback(customCallback);
-        sapi.checkDuplicates(request);
+        Callback.requestBuilt(request);
     }
 
 }
