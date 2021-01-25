@@ -67,6 +67,7 @@ public class ServerApi {
     }
 
     public RequestBuilder request(String url) {
+        log("Building Request!");
         return new RequestBuilder(url, new CallBackRequestBuilt() {
             @Override
             public void requestBuilt(Request request) {
@@ -85,7 +86,7 @@ public class ServerApi {
     }
 
     private void addRequestToQue(Request request) {
-        if (!Config.allowDuplicateRequests() || isDuplicate(request))
+        if (!Config.allowDuplicateRequests() && isDuplicate(request))
             return;
 
         Requests.add(request);

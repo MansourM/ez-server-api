@@ -1,6 +1,6 @@
 package ir.masterz.mansour.ez.serverapi;
 
-class Config {
+public class Config {
     private boolean LoggingEnabled = false;
     private String Tag = "ez_server_api";
 

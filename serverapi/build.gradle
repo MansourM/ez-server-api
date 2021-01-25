@@ -16,8 +16,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
         }
     }
 
@@ -28,3 +31,4 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:3.0.9'
     api 'com.google.code.gson:gson:2.8.6'
 }
+
