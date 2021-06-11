@@ -7,6 +7,9 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
+import ir.masterz.mansour.ez.serverapi.callback.FullApiCallback;
+
 public abstract class BaseApi {
 
     private final Context app_context;
@@ -44,8 +47,10 @@ public abstract class BaseApi {
             connect();
         } else {
             retriesLeft = Config.getRetryCount();
-            Requests.get(0).getCustomCallback().onResponse();
-            Requests.get(0).getCustomCallback().onFailure();
+            if (Requests.get(0).getCustomCallback() instanceof FullApiCallback) {
+                ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
+                ((FullApiCallback) Requests.get(0).getCustomCallback()).onFailure();
+            }
             requestCompleted();
         }
     }

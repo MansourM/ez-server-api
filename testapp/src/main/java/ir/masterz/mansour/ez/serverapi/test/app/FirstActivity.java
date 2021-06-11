@@ -1,15 +1,15 @@
 package ir.masterz.mansour.ez.serverapi.test.app;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
 
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
-import ir.masterz.mansour.ez.serverapi.ListenerServerApi;
+import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
+import ir.masterz.mansour.ez.serverapi.callback.FullApiCallback;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -34,7 +34,7 @@ public class FirstActivity extends AppCompatActivity {
 
     private void init() {
         G.API.request("http://dotat.ir/v1/app/init")
-                .setCustomCallback(new ListenerServerApi() {
+                .setCustomCallback(new FullApiCallback() {
                     @Override
                     public void onSuccess(String message, JsonObject data) {
 
@@ -63,23 +63,14 @@ public class FirstActivity extends AppCompatActivity {
         G.API.request("http://dotat.ir/v1/tournament/getMatches")
                 .setToken("f47xgpoxozd8r9j4ueiog6behp2kziab90uebm45")
                 .setRequestJason(new JsonBuilder().add("bracket_id", 1).build())
-                .setCustomCallback(new ListenerServerApi() {
+                .setCustomCallback(new ApiCallback() {
                     @Override
-                    public void onSuccess(String s, JsonObject jsonObject) {
-                    }
-
-                    @Override
-                    public void onErrorMessage(String s, JsonObject jsonObject) {
+                    public void onErrorMessage(String message, JsonObject data) {
 
                     }
 
                     @Override
-                    public void onFailure() {
-
-                    }
-
-                    @Override
-                    public void onResponse() {
+                    public void onSuccess(String message, JsonObject data) {
 
                     }
                 });

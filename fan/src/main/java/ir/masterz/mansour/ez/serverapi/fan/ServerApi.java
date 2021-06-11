@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import ir.masterz.mansour.ez.serverapi.BaseApi;
+import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
+import ir.masterz.mansour.ez.serverapi.callback.FullApiCallback;
 
 public class ServerApi extends BaseApi {
     public ServerApi(Context context) {
@@ -43,11 +45,15 @@ public class ServerApi extends BaseApi {
 
                         Requests.get(0).setResponseJason(result);
                         log("response Json= " + Requests.get(0).getResponseJason());
-                        Requests.get(0).getCustomCallback().onResponse();
+
+                        if (Requests.get(0).getCustomCallback() instanceof FullApiCallback)
+                            ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
+
                         if (getStatus() != 0)
                             Requests.get(0).getCustomCallback().onSuccess(getMessage(), getData());
-                        else {
-                            Requests.get(0).getCustomCallback().onErrorMessage(getMessage(), getData());
+
+                        else if (Requests.get(0).getCustomCallback() instanceof ApiCallback){
+                            ((ApiCallback)Requests.get(0).getCustomCallback()).onErrorMessage(getMessage(), getData());
                         }
                         Requests.get(0).success();
                         requestCompleted();
@@ -68,4 +74,8 @@ public class ServerApi extends BaseApi {
                     }
                 });
     }
+
+    //TODO: Using it with your own JAVA Object - JSON Parser
+    //TODO: Image Upload
+    //TODO: add automatic Error handling / logging for lower callback levels
 }

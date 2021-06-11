@@ -2,6 +2,8 @@ package ir.masterz.mansour.ez.serverapi;
 
 import com.google.gson.JsonObject;
 
+import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
+
 /**
  * Created by Sora on 4/22/2017.
  */
@@ -13,7 +15,7 @@ public class Request {
     private String Token;
     private JsonObject RequestJason;
     private JsonObject ResponseJason;
-    private ListenerServerApi CustomCallback;
+    private SuccessCallback CustomCallback;
     private boolean success;
 
     public Request() {
@@ -79,11 +81,11 @@ public class Request {
         ResponseJason = responseJason;
     }
 
-    public ListenerServerApi getCustomCallback() {
+    public SuccessCallback getCustomCallback() {
         return CustomCallback;
     }
 
-    public void setCustomCallback(ListenerServerApi customCallback) {
+    public void setCustomCallback(SuccessCallback customCallback) {
         CustomCallback = customCallback;
     }
 

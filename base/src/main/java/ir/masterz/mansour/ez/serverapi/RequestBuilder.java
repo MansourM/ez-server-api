@@ -2,6 +2,9 @@ package ir.masterz.mansour.ez.serverapi;
 
 import com.google.gson.JsonObject;
 
+import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
+import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
+
 /**
  * Created by Sora on 4/22/2017.
  */
@@ -37,7 +40,7 @@ public class RequestBuilder {
     }
 
 
-    public void setCustomCallback(ListenerServerApi customCallback) {
+    public void setCustomCallback(SuccessCallback customCallback) {
         request.setCustomCallback(customCallback);
         Callback.requestBuilt(request);
     }
