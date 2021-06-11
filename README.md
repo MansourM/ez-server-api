@@ -27,5 +27,5 @@ examples
     implementation 'com.github.MansourM.ez-server-api:fan:0.1.4'
     implementation 'com.github.MansourM.ez-server-api:ion:0.1.5'
     
-"fan" uses [Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking "Fast Android Networking") for networking 
+"fan" uses [Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking "Fast Android Networking") for networking
 "ion" uses[ ION](https://github.com/koush/ion " ION") for networking (more utility but needs google play service to work)
