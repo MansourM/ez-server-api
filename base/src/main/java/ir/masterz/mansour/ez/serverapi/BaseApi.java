@@ -10,21 +10,31 @@ import java.util.ArrayList;
 import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
 import ir.masterz.mansour.ez.serverapi.callback.FullApiCallback;
+import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
 
 public abstract class BaseApi {
 
     private final Context app_context;
-
-    public final ArrayList<Request> Requests;
+    private int retriesLeft;
 
     private final Config Config;
-    private int retriesLeft;
+    private ErrorMessageHandler ErrorMessageHandler;
+
+    public final ArrayList<Request> Requests;
 
     protected BaseApi(Context context) {
         app_context = context;
         Config = new Config();
         retriesLeft = Config.getRetryCount();
         Requests = new ArrayList<>();
+    }
+
+    public abstract static class ErrorMessageHandler {
+        public abstract void handleError(String message, JsonObject data);
+    }
+
+    public void setErrorMessageHandler(ErrorMessageHandler errorMessageHandler) {
+        ErrorMessageHandler = errorMessageHandler;
     }
 
     protected Context getAppContext() {
@@ -118,21 +128,22 @@ public abstract class BaseApi {
             ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
 
         if (getStatus() != 0)
-            onSuccess();
+            onSuccess(Requests.get(0).getCustomCallback(), getMessage(), getData());
         else
-            onErrorMessage();
+            onErrorMessage(Requests.get(0).getCustomCallback(), getMessage(), getData());
 
         Requests.get(0).success();
         requestCompleted();
     }
 
-    protected void onErrorMessage() {
-        if (Requests.get(0).getCustomCallback() instanceof ApiCallback) {
-            ((ApiCallback) Requests.get(0).getCustomCallback()).onErrorMessage(getMessage(), getData());
-        }
+    protected void onErrorMessage(SuccessCallback callback, String message, JsonObject data) {
+        if (callback instanceof ApiCallback)
+            ((ApiCallback) Requests.get(0).getCustomCallback()).onErrorMessage(message, data);
+        else if (ErrorMessageHandler != null)
+            ErrorMessageHandler.handleError(message, data);
     }
 
-    protected void onSuccess() {
-        Requests.get(0).getCustomCallback().onSuccess(getMessage(), getData());
+    protected void onSuccess(SuccessCallback callback, String message, JsonObject data) {
+        callback.onSuccess(message, data);
     }
 }
