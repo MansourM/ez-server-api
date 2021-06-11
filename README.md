@@ -1,7 +1,7 @@
 [![](https://jitpack.io/v/MansourM/ez-server-api.svg)](https://jitpack.io/#MansourM/ez-server-api)
 
 # ez-server-api
-this is an unfinished api for personal use
+this is an WIP api, developed to make specific REST calls easy and fast to code.
 
 # Import:
 
@@ -24,5 +24,8 @@ Step 2. Add the dependency
 	
 examples
 
+    implementation 'com.github.MansourM.ez-server-api:fan:0.1.4'
     implementation 'com.github.MansourM.ez-server-api:ion:0.1.5'
-    implementation 'com.github.MansourM.ez-server-api:fan:0.1.4' //fan lib not implemented yet
+    
+"fan" uses [Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking "Fast Android Networking") for networking 
+"ion" uses[ ION](https://github.com/koush/ion " ION") for networking (more utility but needs google play service to work)
