@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
 import ir.masterz.mansour.ez.serverapi.callback.FullApiCallback;
 
@@ -111,4 +112,27 @@ public abstract class BaseApi {
     }
 
     protected abstract void connect();
+
+    protected void onResponse() {
+        if (Requests.get(0).getCustomCallback() instanceof FullApiCallback)
+            ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
+
+        if (getStatus() != 0)
+            onSuccess();
+        else
+            onErrorMessage();
+
+        Requests.get(0).success();
+        requestCompleted();
+    }
+
+    protected void onErrorMessage() {
+        if (Requests.get(0).getCustomCallback() instanceof ApiCallback) {
+            ((ApiCallback) Requests.get(0).getCustomCallback()).onErrorMessage(getMessage(), getData());
+        }
+    }
+
+    protected void onSuccess() {
+        Requests.get(0).getCustomCallback().onSuccess(getMessage(), getData());
+    }
 }

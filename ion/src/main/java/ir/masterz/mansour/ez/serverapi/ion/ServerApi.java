@@ -37,6 +37,7 @@ public class ServerApi extends BaseApi {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+
                         log("Json connect Completed!");
                         if (e != null) {
                             log("" + e.getMessage());
@@ -44,20 +45,11 @@ public class ServerApi extends BaseApi {
                             e.printStackTrace();
                             retry();
                         } else {
+
                             Requests.get(0).setResponseJason(result);
                             log("response Json= " + Requests.get(0).getResponseJason());
 
-                            if (Requests.get(0).getCustomCallback() instanceof FullApiCallback)
-                                ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
-
-                            if (getStatus() != 0)
-                                Requests.get(0).getCustomCallback().onSuccess(getMessage(), getData());
-
-                            else if (Requests.get(0).getCustomCallback() instanceof ApiCallback) {
-                                ((ApiCallback) Requests.get(0).getCustomCallback()).onErrorMessage(getMessage(), getData());
-                            }
-                            Requests.get(0).success();
-                            requestCompleted();
+                            onResponse();
                         }
                     }
                 });
