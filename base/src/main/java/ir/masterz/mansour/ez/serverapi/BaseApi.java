@@ -124,13 +124,16 @@ public abstract class BaseApi {
     protected abstract void connect();
 
     protected void onResponse() {
-        if (Requests.get(0).getCustomCallback() instanceof FullApiCallback)
+        SuccessCallback callback = Requests.get(0).getCustomCallback();
+        warnHandler(callback);
+
+        if (callback instanceof FullApiCallback)
             ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
 
         if (getStatus() != 0)
-            onSuccess(Requests.get(0).getCustomCallback(), getMessage(), getData());
+            onSuccess(callback, getMessage(), getData());
         else
-            onErrorMessage(Requests.get(0).getCustomCallback(), getMessage(), getData());
+            onErrorMessage(callback, getMessage(), getData());
 
         Requests.get(0).success();
         requestCompleted();
@@ -145,5 +148,11 @@ public abstract class BaseApi {
 
     protected void onSuccess(SuccessCallback callback, String message, JsonObject data) {
         callback.onSuccess(message, data);
+    }
+
+    private void warnHandler(SuccessCallback callback) {
+        if (!(callback instanceof ApiCallback) && ErrorMessageHandler == null)
+            Log.w(Config.getLoggingTag(), "using a SuccessCallback without Setting up a Default ErrorMessageHandler!");
+
     }
 }

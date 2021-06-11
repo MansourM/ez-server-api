@@ -33,7 +33,7 @@ public class G extends Application {
         Toast.makeText(APP_CONTEXT, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private class MyApiErrorMessageHandler extends BaseApi.ErrorMessageHandler {
+    private static class MyApiErrorMessageHandler extends BaseApi.ErrorMessageHandler {
 
         @Override
         public void handleError(String message, JsonObject data) {

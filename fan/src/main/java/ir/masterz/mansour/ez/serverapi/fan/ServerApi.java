@@ -65,5 +65,5 @@ public class ServerApi extends BaseApi {
 
     //TODO: Using it with your own JAVA Object - JSON Parser
     //TODO: Image Upload
-    //TODO: add automatic Error handling / logging for lower callback levels
+    //TODO: add automatic Error handling (Done) maybe redo it with lambda later?
 }
