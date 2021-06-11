@@ -38,7 +38,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     //local dependency
-    implementation project(path: ':ion')
+    implementation project(path: ':fan')
 
     //online dependency
     //implementation 'com.github.MansourM.ez-server-api:ion:0.1.4'

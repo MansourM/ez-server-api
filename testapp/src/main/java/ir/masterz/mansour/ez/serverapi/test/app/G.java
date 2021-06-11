@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.widget.Toast;
 
-import ir.masterz.mansour.ez.serverapi.ion.ServerApi;
+import ir.masterz.mansour.ez.serverapi.fan.ServerApi;
 
 
 public class G extends Application {

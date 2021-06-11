@@ -29,9 +29,10 @@ public class ServerApi extends BaseApi {
         log("Token= " + token);
         log("Request Json= " + Requests.get(0).getRequestJason());
 
-        AndroidNetworking.get(Requests.get(0).getRequestUrl())
+        AndroidNetworking.post(Requests.get(0).getRequestUrl())
                 .addHeaders("token", token)
                 .setTag(getConfig().getLoggingTag())
+                .addStringBody(Requests.get(0).getRequestJason().toString())
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
@@ -56,8 +57,13 @@ public class ServerApi extends BaseApi {
                     public void onError(ANError anError) {
                         log("Json connect Completed! : Error");
 
-                        log(anError.getMessage());
-                        log(anError.getResponse().toString());
+                        try {
+                            log(anError.getMessage());
+                            log(anError.getResponse().toString());
+                        } catch (Exception e) {
+                            log(e.getMessage());
+                        }
+
                         retry();
                     }
                 });

@@ -8,11 +8,13 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 
+import ir.masterz.mansour.ez.serverapi.JsonBuilder;
 import ir.masterz.mansour.ez.serverapi.ListenerServerApi;
 
 public class FirstActivity extends AppCompatActivity {
 
     private static final String TAG = "activity_first";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +28,8 @@ public class FirstActivity extends AppCompatActivity {
         super.onResume();
 
         Log.d(TAG, "onCreate");
-        init();
+        //init();
+        getMatches();
     }
 
     private void init() {
@@ -51,6 +54,33 @@ public class FirstActivity extends AppCompatActivity {
                     @Override
                     public void onResponse() {
                         Log.d(TAG, "onResponse");
+                    }
+                });
+    }
+
+    private void getMatches() {
+
+        G.API.request("http://dotat.ir/v1/tournament/getMatches")
+                .setToken("f47xgpoxozd8r9j4ueiog6behp2kziab90uebm45")
+                .setRequestJason(new JsonBuilder().add("bracket_id", 1).build())
+                .setCustomCallback(new ListenerServerApi() {
+                    @Override
+                    public void onSuccess(String s, JsonObject jsonObject) {
+                    }
+
+                    @Override
+                    public void onErrorMessage(String s, JsonObject jsonObject) {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+
+                    @Override
+                    public void onResponse() {
+
                     }
                 });
     }
