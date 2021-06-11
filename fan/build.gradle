@@ -28,5 +28,8 @@ android {
 }
 
 dependencies {
-    implementation project(':base')
+
+    api project(':base')
+
+    //FAN
 }

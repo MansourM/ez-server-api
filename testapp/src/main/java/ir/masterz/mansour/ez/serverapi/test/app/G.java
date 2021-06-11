@@ -1,9 +1,10 @@
 package ir.masterz.mansour.ez.serverapi.test.app;
+
 import android.app.Application;
 import android.content.Context;
 import android.widget.Toast;
 
-import ir.masterz.mansour.ez.serverapi.ServerApi;
+import ir.masterz.mansour.ez.serverapi.ion.ServerApi;
 
 
 public class G extends Application {
@@ -20,7 +21,7 @@ public class G extends Application {
 
         API = new ServerApi(APP_CONTEXT);
         API.getConfig().setLogging(true);
-        API.getConfig().setLoggingTag("malmal_log");
+        API.getConfig().setLoggingTag("Mansour_API");
 
     }
 

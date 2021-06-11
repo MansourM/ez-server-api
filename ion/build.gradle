@@ -29,4 +29,9 @@ android {
 
 dependencies {
 
+    api project(':base')
+
+    //ION
+    implementation 'com.koushikdutta.ion:ion:3.0.9'
+
 }
