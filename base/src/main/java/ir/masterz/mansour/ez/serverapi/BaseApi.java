@@ -16,14 +16,14 @@ public abstract class BaseApi {
     private final Config Config;
     private int retriesLeft;
 
-    public BaseApi(Context context) {
+    protected BaseApi(Context context) {
         app_context = context;
         Config = new Config();
         retriesLeft = Config.getRetryCount();
         Requests = new ArrayList<>();
     }
 
-    public Context getAppContext() {
+    protected Context getAppContext() {
         return app_context;
     }
 
@@ -37,7 +37,7 @@ public abstract class BaseApi {
     }
 
 
-    public void retry() {
+    protected void retry() {
         retriesLeft--;
         if (retriesLeft > 0) {
             log("Retrying, Retries Left :" + retriesLeft);
@@ -50,16 +50,16 @@ public abstract class BaseApi {
         }
     }
 
-    public int getStatus() {
+    protected int getStatus() {
         return Requests.get(0).getResponseJason().get("status").getAsInt();
     }
 
 
-    public String getMessage() {
+    protected String getMessage() {
         return Requests.get(0).getResponseJason().get("message").getAsString();
     }
 
-    public JsonObject getData() {
+    protected JsonObject getData() {
         try {
             return Requests.get(0).getResponseJason().get("data").getAsJsonObject();
         } catch (Exception e) {
@@ -97,7 +97,7 @@ public abstract class BaseApi {
             connect();
     }
 
-    public void requestCompleted() {
+    protected void requestCompleted() {
         Requests.remove(0);
         if (Requests.size() > 0)
             connect();
@@ -105,5 +105,5 @@ public abstract class BaseApi {
             log("request que done!");
     }
 
-    public abstract void connect();
+    protected abstract void connect();
 }

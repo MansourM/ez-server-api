@@ -32,4 +32,6 @@ dependencies {
     api project(':base')
 
     //FAN
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
+
 }
