@@ -1,2 +1,4 @@
-include ':serverapi'
+include ':base'
 rootProject.name='MansourEZ ServerAPI'
+include ':fan'
+include ':ion'
