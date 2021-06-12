@@ -18,7 +18,7 @@ public abstract class BaseApi {
     private int retriesLeft;
 
     private final Config Config;
-    private ErrorMessageHandler ErrorMessageHandler;
+    private CallbackDefaultHandler CallbackDefaultHandler;
 
     public final ArrayList<Request> Requests;
 
@@ -29,12 +29,14 @@ public abstract class BaseApi {
         Requests = new ArrayList<>();
     }
 
-    public abstract static class ErrorMessageHandler {
-        public abstract void handleError(String message, JsonObject data);
+    public abstract static class CallbackDefaultHandler {
+        public abstract void handleErrorMessage(String message, JsonObject data);
+
+        public abstract void handleFailure();
     }
 
-    public void setErrorMessageHandler(ErrorMessageHandler errorMessageHandler) {
-        ErrorMessageHandler = errorMessageHandler;
+    public void setErrorMessageHandler(CallbackDefaultHandler callbackDefaultHandler) {
+        CallbackDefaultHandler = callbackDefaultHandler;
     }
 
     protected Context getAppContext() {
@@ -61,7 +63,11 @@ public abstract class BaseApi {
             if (Requests.get(0).getCustomCallback() instanceof FullApiCallback) {
                 ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
                 ((FullApiCallback) Requests.get(0).getCustomCallback()).onFailure();
-            }
+            } else if (CallbackDefaultHandler != null)
+                CallbackDefaultHandler.handleFailure();
+            else
+                Log.w(Config.getLoggingTag(), "using a ApiCallback/SuccessCallback without Setting up a CallbackDefaultHandler!");
+
             requestCompleted();
         }
     }
@@ -142,8 +148,8 @@ public abstract class BaseApi {
     protected void onErrorMessage(SuccessCallback callback, String message, JsonObject data) {
         if (callback instanceof ApiCallback)
             ((ApiCallback) Requests.get(0).getCustomCallback()).onErrorMessage(message, data);
-        else if (ErrorMessageHandler != null)
-            ErrorMessageHandler.handleError(message, data);
+        else if (CallbackDefaultHandler != null)
+            CallbackDefaultHandler.handleErrorMessage(message, data);
     }
 
     protected void onSuccess(SuccessCallback callback, String message, JsonObject data) {
@@ -151,8 +157,16 @@ public abstract class BaseApi {
     }
 
     private void warnHandler(SuccessCallback callback) {
-        if (!(callback instanceof ApiCallback) && ErrorMessageHandler == null)
-            Log.w(Config.getLoggingTag(), "using a SuccessCallback without Setting up a Default ErrorMessageHandler!");
+
+        if (CallbackDefaultHandler == null && !(callback instanceof ApiCallback))
+            Log.w(Config.getLoggingTag(), "using a SuccessCallback without Setting up a CallbackDefaultHandler!");
+
 
     }
+
+    //TODO: Using it with your own JAVA Object - JSON Parser
+    //TODO: Image Upload
+    //TODO: add automatic Error/Failure handling (Done) maybe redo it with lambda later?
+    //TODO: make token header and json body optional
+    //TODO: think about decentralized API requests
 }

@@ -25,7 +25,7 @@ public class G extends Application {
         API = new ServerApi(APP_CONTEXT);
         API.getConfig().setLogging(true);
         API.getConfig().setLoggingTag("Mansour_API");
-        API.setErrorMessageHandler(new MyApiErrorMessageHandler());
+        API.setErrorMessageHandler(new MyApiCallbackDefaultHandler());
 
     }
 
@@ -33,11 +33,16 @@ public class G extends Application {
         Toast.makeText(APP_CONTEXT, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private static class MyApiErrorMessageHandler extends BaseApi.ErrorMessageHandler {
+    private static class MyApiCallbackDefaultHandler extends BaseApi.CallbackDefaultHandler {
 
         @Override
-        public void handleError(String message, JsonObject data) {
+        public void handleErrorMessage(String message, JsonObject data) {
             G.message("Error handled by Default Error Message Handler, msg: " + message);
+        }
+
+        @Override
+        public void handleFailure() {
+            G.message("Connection Error!");
         }
     }
 
