@@ -10,7 +10,6 @@ import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
 
 public class Request {
 
-    private String Method;
     private String RequestUrl;
     private String Token;
     private JsonObject RequestJason;
@@ -31,14 +30,6 @@ public class Request {
         RequestJason = new JsonObject();
         success = false;
         setRequestUrl(url);
-    }
-
-    public String getMethod() {
-        return Method;
-    }
-
-    public void setMethod(String method) {
-        Method = method;
     }
 
     public boolean wasSuccessful() {
@@ -99,7 +90,6 @@ public class Request {
 
         return this.getRequestUrl().equals(that.getRequestUrl())
                 && this.getRequestJason().equals(that.getRequestJason())
-                && this.getMethod().equals(that.getMethod())
                 && this.getToken().equals(that.getToken());
     }
 

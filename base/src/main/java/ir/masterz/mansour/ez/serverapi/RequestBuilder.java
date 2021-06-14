@@ -23,12 +23,6 @@ public class RequestBuilder {
         request = new Request(url);
     }
 
-    public RequestBuilder setMethod(String method) {
-        request.setMethod(method);
-        return this;
-    }
-
-
     public RequestBuilder setToken(String token) {
         request.setToken(token);
         return this;
