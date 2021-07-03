@@ -31,7 +31,6 @@ public abstract class BaseApi {
 
     public abstract static class CallbackDefaultHandler {
         public abstract void handleErrorMessage(String message, JsonObject data);
-
         public abstract void handleFailure();
     }
 
@@ -51,7 +50,6 @@ public abstract class BaseApi {
         if (Config.loggingEnabled())
             Log.d(Config.getLoggingTag(), msg);
     }
-
 
     protected void retry() {
         retriesLeft--;

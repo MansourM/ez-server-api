@@ -2,9 +2,9 @@ package ir.masterz.mansour.ez.serverapi.fan;
 
 import android.content.Context;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.StringRequestListener;
+import ir.masterz.mansour.fan.core.AndroidNetworking;
+import ir.masterz.mansour.fan.core.error.ANError;
+import ir.masterz.mansour.fan.core.interfaces.StringRequestListener;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -28,6 +28,9 @@ public class ServerApi extends BaseApi {
         log("url= " + Requests.get(0).getRequestUrl());
         log("Token= " + token);
         log("Request Json= " + Requests.get(0).getRequestJason());
+
+        //TODO:
+        // ANRequest.PostRequestBuilder req = AndroidNetworking.post(Requests.get(0).getRequestUrl());
 
         AndroidNetworking.post(Requests.get(0).getRequestUrl())
                 .addHeaders("token", token)

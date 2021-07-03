@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -28,11 +28,7 @@ android {
 }
 
 dependencies {
-
-    api project(':base')
-    api project(':fan-core')
-
-    //FAN
-    //implementation 'com.amitshekhar.android:android-networking:1.0.2'
-
+    api "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttp3Version"
+    implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
+    implementation 'androidx.appcompat:appcompat:1.3.0'
 }

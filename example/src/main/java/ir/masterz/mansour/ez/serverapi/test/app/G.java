@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import ir.masterz.mansour.ez.serverapi.BaseApi;
 import ir.masterz.mansour.ez.serverapi.fan.ServerApi;
 
+//TODO: Server api add setPermenantToken
 
 public class G extends Application {
 
