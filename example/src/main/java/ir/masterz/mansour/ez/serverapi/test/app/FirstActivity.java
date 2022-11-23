@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SeApiCallback;
+import ir.masterz.mansour.ez.serverapi.callback.composit.SrApiCallback;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -30,6 +31,8 @@ public class FirstActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate");
 
         findViewById(R.id.btn_malfored).setOnClickListener(v -> malformedResponse());
+        findViewById(R.id.btn_test_1).setOnClickListener(v -> test1());
+        findViewById(R.id.btn_test_2).setOnClickListener(v -> test2());
         //errorMessageWithData();
     }
 
@@ -41,6 +44,26 @@ public class FirstActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void test1() {
+        Log.d(TAG,"test1");
+        G.API.request("http://10.0.2.2:8081/test/test1")
+                .setCustomCallback(new SrApiCallback() {
+                    @Override
+                    public void onResponse() {
+                        Log.d(TAG,"response");
+                    }
+
+                    @Override
+                    public void onSuccess(String message, JsonObject data) {
+                        Log.d(TAG,"success");
+                    }
+                });
+    }
+
+    private void test2() {
+        Log.d(TAG,"test2");
     }
 
     private void successMessage() {

@@ -52,6 +52,7 @@ public abstract class BaseApi {
         if (Config.loggingEnabled())
             Log.d(Config.getLoggingTag(), msg);
     }
+
     public void loge(String msg) {
         if (Config.loggingEnabled())
             Log.e(Config.getLoggingTag(), msg);
@@ -66,10 +67,10 @@ public abstract class BaseApi {
         }
 
         //Handling onFailure and onResponse before finishing current "failed" request
-        if (Requests.get(0).getCustomCallback().getClass().isAssignableFrom(ResponseCallback.class))
+        if (Requests.get(0).getCustomCallback() instanceof ResponseCallback)
             ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
 
-        if (Requests.get(0).getCustomCallback().getClass().isAssignableFrom(FailureCallback.class))
+        if (Requests.get(0).getCustomCallback() instanceof FailureCallback)
             ((FailureCallback) Requests.get(0).getCustomCallback()).onFailure();
         else if (CallbackDefaultHandler != null)
             CallbackDefaultHandler.handleFailure();
@@ -145,7 +146,9 @@ public abstract class BaseApi {
     protected void onValidResponse() {
         SuccessCallback callback = Requests.get(0).getCustomCallback();
 
-        if (callback.getClass().isAssignableFrom(ResponseCallback.class))
+        log("valid r:" + callback.getClass().getSimpleName() + ":" + ResponseCallback.class.getSimpleName());
+
+        if (callback instanceof ResponseCallback)
             ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
 
         if (getStatus() != 0)
@@ -157,23 +160,22 @@ public abstract class BaseApi {
         processNextRequest();
     }
 
-    //success or error message
     protected void onResponseParseError() {
         loge("unable parse the response string!");
 
         SuccessCallback callback = Requests.get(0).getCustomCallback();
 
-        if (callback.getClass().isAssignableFrom(ResponseCallback.class))
+        if (callback instanceof ResponseCallback)
             ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
 
-        if (callback.getClass().isAssignableFrom(FailureCallback.class))
+        if (callback instanceof FailureCallback)
             ((FailureCallback) Requests.get(0).getCustomCallback()).onFailure();
 
         processNextRequest();
     }
 
     protected void onErrorMessage(SuccessCallback callback, String message, JsonObject data) {
-        if (callback.getClass().isAssignableFrom(ErrorCallback.class))
+        if (callback instanceof ErrorCallback)
             ((ErrorCallback) Requests.get(0).getCustomCallback()).onErrorMessage(message, data);
         else if (CallbackDefaultHandler != null)
             CallbackDefaultHandler.handleErrorMessage(message, data);
