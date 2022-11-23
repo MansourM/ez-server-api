@@ -54,7 +54,7 @@ public class ServerApi extends BaseApi {
                         request.setResponseJson(result);
                         log("response Json= " + request.getResponseJson());
 
-                        ServerApi.super.onResponse();
+                        ServerApi.super.onValidResponse();
                     }
 
                     @Override
@@ -62,7 +62,10 @@ public class ServerApi extends BaseApi {
                         log("Json connect Completed! : Error");
 
                         try {
+                            log(anError.getErrorCode()+"");
+                            log(anError.getErrorDetail());
                             log(anError.getMessage());
+                            log(anError.getCause().getMessage()+"");
                             log(anError.getResponse().toString());
                         } catch (Exception e) {
                             log(e.getMessage());

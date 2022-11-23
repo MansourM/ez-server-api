@@ -114,7 +114,7 @@ public abstract class BaseApi {
     }
 
     private void addRequestToQue(Request request) {
-        if (!Config.allowDuplicateRequests() && isDuplicate(request))
+        if (isDuplicate(request) && !Config.allowDuplicateRequests())
             return;
 
         Requests.add(request);
@@ -139,12 +139,13 @@ public abstract class BaseApi {
 
     protected abstract void connect(final Request request);
 
-    protected void onResponse() {
+    //success or error message
+    protected void onValidResponse() {
         SuccessCallback callback = Requests.get(0).getCustomCallback();
         warnHandler(callback);
 
-        if (callback instanceof FullApiCallback)
-            ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
+        if (callback.getClass().isAssignableFrom(ResponseCallback.class))
+            ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
 
         if (getStatus() != 0)
             onSuccess(callback, getMessage(), getData());
@@ -162,6 +163,7 @@ public abstract class BaseApi {
             CallbackDefaultHandler.handleErrorMessage(message, data);
     }
 
+    //TODO: hmmmmm :D
     protected void onSuccess(SuccessCallback callback, String message, JsonObject data) {
         callback.onSuccess(message, data);
     }
