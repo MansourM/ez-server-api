@@ -117,8 +117,12 @@ public abstract class BaseApi {
     }
 
     private void addRequestToQue(Request request) {
-        if (isDuplicate(request) && !Config.allowDuplicateRequests())
+        if (isDuplicate(request) && !Config.allowDuplicateRequests()) {
+            SuccessCallback callback = request.getCustomCallback();
+            if (callback instanceof ResponseCallback)
+                ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
             return;
+        }
 
         Requests.add(request);
         if (Requests.size() > 1)
