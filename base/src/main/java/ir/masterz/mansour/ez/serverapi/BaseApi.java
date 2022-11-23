@@ -7,9 +7,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
-import ir.masterz.mansour.ez.serverapi.callback.FullApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.basic.ErrorCallback;
 import ir.masterz.mansour.ez.serverapi.callback.basic.FailureCallback;
 import ir.masterz.mansour.ez.serverapi.callback.basic.ResponseCallback;
@@ -53,6 +51,10 @@ public abstract class BaseApi {
     public void log(String msg) {
         if (Config.loggingEnabled())
             Log.d(Config.getLoggingTag(), msg);
+    }
+    public void loge(String msg) {
+        if (Config.loggingEnabled())
+            Log.e(Config.getLoggingTag(), msg);
     }
 
     protected void retry() {
@@ -142,7 +144,6 @@ public abstract class BaseApi {
     //success or error message
     protected void onValidResponse() {
         SuccessCallback callback = Requests.get(0).getCustomCallback();
-        warnHandler(callback);
 
         if (callback.getClass().isAssignableFrom(ResponseCallback.class))
             ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
@@ -153,6 +154,21 @@ public abstract class BaseApi {
             onErrorMessage(callback, getMessage(), getData());
 
         Requests.get(0).success();
+        processNextRequest();
+    }
+
+    //success or error message
+    protected void onResponseParseError() {
+        loge("unable parse the response string!");
+
+        SuccessCallback callback = Requests.get(0).getCustomCallback();
+
+        if (callback.getClass().isAssignableFrom(ResponseCallback.class))
+            ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
+
+        if (callback.getClass().isAssignableFrom(FailureCallback.class))
+            ((FailureCallback) Requests.get(0).getCustomCallback()).onFailure();
+
         processNextRequest();
     }
 
@@ -168,13 +184,6 @@ public abstract class BaseApi {
         callback.onSuccess(message, data);
     }
 
-    private void warnHandler(SuccessCallback callback) {
-
-        if (CallbackDefaultHandler == null && !(callback instanceof ApiCallback))
-            Log.w(Config.getLoggingTag(), "using a SuccessCallback without Setting up a CallbackDefaultHandler!");
-
-
-    }
 
     //TODO: Using it with your own JAVA Object - JSON Parser
     //TODO: Image Upload

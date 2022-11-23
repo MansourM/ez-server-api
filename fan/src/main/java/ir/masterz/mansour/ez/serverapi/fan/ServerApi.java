@@ -49,12 +49,15 @@ public class ServerApi extends BaseApi {
                     public void onResponse(String response) {
                         log("Json connect Completed! : Response");
                         log(response);
-                        JsonObject result = JsonParser.parseString(response).getAsJsonObject();
-
-                        request.setResponseJson(result);
-                        log("response Json= " + request.getResponseJson());
-
-                        ServerApi.super.onValidResponse();
+                        try {
+                            JsonObject result = JsonParser.parseString(response).getAsJsonObject();
+                            request.setResponseJson(result);
+                            log("response Json= " + request.getResponseJson());
+                            ServerApi.super.onValidResponse();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ServerApi.super.onResponseParseError();
+                        }
                     }
 
                     @Override
@@ -62,15 +65,12 @@ public class ServerApi extends BaseApi {
                         log("Json connect Completed! : Error");
 
                         try {
-                            log(anError.getErrorCode()+"");
-                            log(anError.getErrorDetail());
-                            log(anError.getMessage());
-                            log(anError.getCause().getMessage()+"");
-                            log(anError.getResponse().toString());
+                            loge("ANError: " + anError.getErrorCode() + "");
+                            log("ANError: " + anError.getMessage());
                         } catch (Exception e) {
-                            log(e.getMessage());
+                            log("ANError: catch!: " + e.getMessage());
+                            e.printStackTrace();
                         }
-
                         retry();
                     }
                 });

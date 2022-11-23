@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.JsonObject;
 
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
-import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
+import ir.masterz.mansour.ez.serverapi.callback.composit.SeApiCallback;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -29,8 +29,18 @@ public class FirstActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate");
 
-        errorMessage();
+        findViewById(R.id.btn_malfored).setOnClickListener(v -> malformedResponse());
         //errorMessageWithData();
+    }
+
+    private void malformedResponse() {
+        G.API.request("http://10.0.2.2:8081/test/malfored")
+                .setCustomCallback(new SuccessCallback() {
+                    @Override
+                    public void onSuccess(String message, JsonObject data) {
+
+                    }
+                });
     }
 
     private void successMessage() {
@@ -69,7 +79,7 @@ public class FirstActivity extends AppCompatActivity {
     private void errorMessageWithData() {
 
         G.API.request(URL.ERROR_MESSAGE_WITH_DATA)
-                .setCustomCallback(new ApiCallback() {
+                .setCustomCallback(new SeApiCallback() {
                     @Override
                     public void onSuccess(String message, JsonObject data) {
 
@@ -86,7 +96,7 @@ public class FirstActivity extends AppCompatActivity {
         G.API.request(URL.ERROR_MESSAGE)
                 .setToken("f47xgpoxozd8r9j4ueiog6behp2kziab90uebm45")
                 .setRequestJason(new JsonBuilder().add("bracket_id", 1).build())
-                .setCustomCallback(new ApiCallback() {
+                .setCustomCallback(new SeApiCallback() {
                     @Override
                     public void onSuccess(String message, JsonObject data) {
 
