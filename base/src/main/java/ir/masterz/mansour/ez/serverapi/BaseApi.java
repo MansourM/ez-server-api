@@ -170,6 +170,8 @@ public abstract class BaseApi {
 
         if (callback instanceof FailureCallback)
             ((FailureCallback) Requests.get(0).getCustomCallback()).onFailure();
+        else if (CallbackDefaultHandler != null)
+            CallbackDefaultHandler.handleFailure();
 
         processNextRequest();
     }
@@ -181,7 +183,7 @@ public abstract class BaseApi {
             CallbackDefaultHandler.handleErrorMessage(message, data);
     }
 
-    //TODO: hmmmmm :D
+
     protected void onSuccess(SuccessCallback callback, String message, JsonObject data) {
         callback.onSuccess(message, data);
     }
@@ -190,4 +192,5 @@ public abstract class BaseApi {
     //TODO: Using it with your own JAVA Object - JSON Parser
     //TODO: Image Upload
     //TODO: think about decentralized API requests
+    //TODO: instance of checks go in a function?
 }
