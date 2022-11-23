@@ -14,6 +14,7 @@ import ir.masterz.mansour.fan.core.error.ANError;
 import ir.masterz.mansour.fan.core.interfaces.StringRequestListener;
 import okhttp3.OkHttpClient;
 
+//TODO better logs
 public class ServerApi extends BaseApi {
     public ServerApi(Context context) {
         super(context);
@@ -52,7 +53,6 @@ public class ServerApi extends BaseApi {
                         try {
                             JsonObject result = JsonParser.parseString(response).getAsJsonObject();
                             request.setResponseJson(result);
-                            log("response Json= " + request.getResponseJson());
                             ServerApi.super.onValidResponse();
                         } catch (Exception e) {
                             e.printStackTrace();
