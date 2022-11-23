@@ -3,7 +3,7 @@ package ir.masterz.mansour.ez.serverapi;
 import com.google.gson.JsonObject;
 
 import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
-import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
+import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 
 /**
  * Created by Sora on 4/22/2017.
@@ -23,13 +23,23 @@ public class RequestBuilder {
         request = new Request(url);
     }
 
+    public RequestBuilder setTag(String tag) {
+        request.setTag(tag);
+        return this;
+    }
+
     public RequestBuilder setToken(String token) {
         request.setToken(token);
         return this;
     }
 
     public RequestBuilder setRequestJason(JsonObject requestJason) {
-        request.setRequestJason(requestJason);
+        request.setRequestJson(requestJason);
+        return this;
+    }
+
+    public RequestBuilder setRequestTimeout(int seconds) {
+        request.setRequestTimeout(seconds);
         return this;
     }
 

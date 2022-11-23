@@ -1,4 +1,4 @@
-package ir.masterz.mansour.ez.serverapi.callback;
+package ir.masterz.mansour.ez.serverapi.callback.basic;
 
 import com.google.gson.JsonObject;
 

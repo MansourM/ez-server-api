@@ -1,6 +1,5 @@
 rootProject.name='MansourEZ ServerAPI'
 include ':base'
 include ':fan'
-include ':ion'
 include ':example'
 include ':fan-core'

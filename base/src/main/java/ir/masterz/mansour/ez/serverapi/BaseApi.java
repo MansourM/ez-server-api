@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
 import ir.masterz.mansour.ez.serverapi.callback.FullApiCallback;
-import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
+import ir.masterz.mansour.ez.serverapi.callback.basic.ErrorCallback;
+import ir.masterz.mansour.ez.serverapi.callback.basic.FailureCallback;
+import ir.masterz.mansour.ez.serverapi.callback.basic.ResponseCallback;
+import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 
 public abstract class BaseApi {
 
@@ -31,6 +34,7 @@ public abstract class BaseApi {
 
     public abstract static class CallbackDefaultHandler {
         public abstract void handleErrorMessage(String message, JsonObject data);
+
         public abstract void handleFailure();
     }
 
@@ -55,33 +59,36 @@ public abstract class BaseApi {
         retriesLeft--;
         if (retriesLeft > 0) {
             log("Retrying, Retries Left :" + retriesLeft);
-            connect();
-        } else {
-            retriesLeft = Config.getRetryCount();
-            if (Requests.get(0).getCustomCallback() instanceof FullApiCallback) {
-                ((FullApiCallback) Requests.get(0).getCustomCallback()).onResponse();
-                ((FullApiCallback) Requests.get(0).getCustomCallback()).onFailure();
-            } else if (CallbackDefaultHandler != null)
-                CallbackDefaultHandler.handleFailure();
-            else
-                Log.w(Config.getLoggingTag(), "using a ApiCallback/SuccessCallback without Setting up a CallbackDefaultHandler!");
-
-            requestCompleted();
+            connect(Requests.get(0));
+            return;
         }
+
+        //Handling onFailure and onResponse before finishing current "failed" request
+        if (Requests.get(0).getCustomCallback().getClass().isAssignableFrom(ResponseCallback.class))
+            ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
+
+        if (Requests.get(0).getCustomCallback().getClass().isAssignableFrom(FailureCallback.class))
+            ((FailureCallback) Requests.get(0).getCustomCallback()).onFailure();
+        else if (CallbackDefaultHandler != null)
+            CallbackDefaultHandler.handleFailure();
+
+        //reset retries go next
+        retriesLeft = Config.getRetryCount();
+        processNextRequest();
     }
 
     protected int getStatus() {
-        return Requests.get(0).getResponseJason().get("status").getAsInt();
+        return Requests.get(0).getResponseJson().get("status").getAsInt();
     }
 
 
     protected String getMessage() {
-        return Requests.get(0).getResponseJason().get("message").getAsString();
+        return Requests.get(0).getResponseJson().get("message").getAsString();
     }
 
     protected JsonObject getData() {
         try {
-            return Requests.get(0).getResponseJason().get("data").getAsJsonObject();
+            return Requests.get(0).getResponseJson().get("data").getAsJsonObject();
         } catch (Exception e) {
             return null;
         }
@@ -117,7 +124,7 @@ public abstract class BaseApi {
             connect();
     }
 
-    protected void requestCompleted() {
+    protected void processNextRequest() {
         Requests.remove(0);
         if (Requests.size() > 0)
             connect();
@@ -125,7 +132,12 @@ public abstract class BaseApi {
             log("request que done!");
     }
 
-    protected abstract void connect();
+    @Deprecated
+    protected void connect() {
+        connect(Requests.get(0));
+    }
+
+    protected abstract void connect(final Request request);
 
     protected void onResponse() {
         SuccessCallback callback = Requests.get(0).getCustomCallback();
@@ -140,12 +152,12 @@ public abstract class BaseApi {
             onErrorMessage(callback, getMessage(), getData());
 
         Requests.get(0).success();
-        requestCompleted();
+        processNextRequest();
     }
 
     protected void onErrorMessage(SuccessCallback callback, String message, JsonObject data) {
-        if (callback instanceof ApiCallback)
-            ((ApiCallback) Requests.get(0).getCustomCallback()).onErrorMessage(message, data);
+        if (callback.getClass().isAssignableFrom(ErrorCallback.class))
+            ((ErrorCallback) Requests.get(0).getCustomCallback()).onErrorMessage(message, data);
         else if (CallbackDefaultHandler != null)
             CallbackDefaultHandler.handleErrorMessage(message, data);
     }
@@ -164,7 +176,5 @@ public abstract class BaseApi {
 
     //TODO: Using it with your own JAVA Object - JSON Parser
     //TODO: Image Upload
-    //TODO: add automatic Error/Failure handling (Done) maybe redo it with lambda later?
-    //TODO: make token header and json body optional
     //TODO: think about decentralized API requests
 }

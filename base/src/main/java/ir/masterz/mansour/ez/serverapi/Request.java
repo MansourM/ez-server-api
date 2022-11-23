@@ -2,7 +2,7 @@ package ir.masterz.mansour.ez.serverapi;
 
 import com.google.gson.JsonObject;
 
-import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
+import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 
 /**
  * Created by Sora on 4/22/2017.
@@ -11,33 +11,43 @@ import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
 public class Request {
 
     private String RequestUrl;
+    private String Tag;
     private String Token;
-    private JsonObject RequestJason;
-    private JsonObject ResponseJason;
+    private JsonObject RequestJson;
+    private JsonObject ResponseJson;
     private SuccessCallback CustomCallback;
-    private boolean success;
+    private boolean Success;
+    private int RequestTimeout;
 
     public Request() {
-        Token = "pub";
-        ResponseJason = new JsonObject();
-        RequestJason = new JsonObject();
-        success = false;
+        setDefaults();
     }
 
     public Request(String url) {
-        Token = "pub";
-        ResponseJason = new JsonObject();
-        RequestJason = new JsonObject();
-        success = false;
+        setDefaults();
         setRequestUrl(url);
     }
 
+    private void setDefaults() {
+        RequestTimeout = 10;
+        ResponseJson = new JsonObject();
+        Success = false;
+    }
+
+    public String getTag() {
+        return Tag;
+    }
+
+    public void setTag(String tag) {
+        Tag = tag;
+    }
+
     public boolean wasSuccessful() {
-        return success;
+        return Success;
     }
 
     public void success() {
-        success = true;
+        Success = true;
     }
 
     public String getRequestUrl() {
@@ -56,20 +66,20 @@ public class Request {
         Token = token;
     }
 
-    public JsonObject getRequestJason() {
-        return RequestJason;
+    public JsonObject getRequestJson() {
+        return RequestJson;
     }
 
-    public void setRequestJason(JsonObject requestJason) {
-        RequestJason = requestJason;
+    public void setRequestJson(JsonObject requestJson) {
+        RequestJson = requestJson;
     }
 
-    public JsonObject getResponseJason() {
-        return ResponseJason;
+    public JsonObject getResponseJson() {
+        return ResponseJson;
     }
 
-    public void setResponseJason(JsonObject responseJason) {
-        ResponseJason = responseJason;
+    public void setResponseJson(JsonObject responseJson) {
+        ResponseJson = responseJson;
     }
 
     public SuccessCallback getCustomCallback() {
@@ -80,6 +90,15 @@ public class Request {
         CustomCallback = customCallback;
     }
 
+    public int getRequestTimeout() {
+        return RequestTimeout;
+    }
+
+    public void setRequestTimeout(int requestTimeout) {
+        RequestTimeout = requestTimeout;
+    }
+
+
     @Override
     public boolean equals(Object other) {
 
@@ -89,7 +108,7 @@ public class Request {
         Request that = (Request) other;
 
         return this.getRequestUrl().equals(that.getRequestUrl())
-                && this.getRequestJason().equals(that.getRequestJason())
+                && this.getRequestJson().equals(that.getRequestJson())
                 && this.getToken().equals(that.getToken());
     }
 

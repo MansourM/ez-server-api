@@ -1,4 +1,4 @@
-package ir.masterz.mansour.ez.serverapi.callback;
+package ir.masterz.mansour.ez.serverapi.callback.composit;
 
 import ir.masterz.mansour.ez.serverapi.callback.basic.ErrorCallback;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
@@ -7,7 +7,6 @@ import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
  * Created by Sora on 11/8/2016.
  */
 
-@Deprecated
-public interface ApiCallback extends SuccessCallback, ErrorCallback {
+public interface SeApiCallback extends SuccessCallback, ErrorCallback {
 
 }

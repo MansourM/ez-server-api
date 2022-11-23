@@ -2,13 +2,17 @@ package ir.masterz.mansour.ez.serverapi.fan;
 
 import android.content.Context;
 
-import ir.masterz.mansour.fan.core.AndroidNetworking;
-import ir.masterz.mansour.fan.core.error.ANError;
-import ir.masterz.mansour.fan.core.interfaces.StringRequestListener;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.concurrent.TimeUnit;
+
 import ir.masterz.mansour.ez.serverapi.BaseApi;
+import ir.masterz.mansour.ez.serverapi.Request;
+import ir.masterz.mansour.fan.core.common.ANRequest;
+import ir.masterz.mansour.fan.core.error.ANError;
+import ir.masterz.mansour.fan.core.interfaces.StringRequestListener;
+import okhttp3.OkHttpClient;
 
 public class ServerApi extends BaseApi {
     public ServerApi(Context context) {
@@ -16,27 +20,30 @@ public class ServerApi extends BaseApi {
     }
 
     @Override
-    public void connect() {
-        if (Requests.size() < 1) {
-            log("Error, not no request remaining, but in connect!!?");
-            return;
-        }
+    public void connect(final Request request) {
 
-        String token = Requests.get(0).getToken();
+        ANRequest.PostRequestBuilder postRequestBuilder = new ANRequest.PostRequestBuilder(request.getRequestUrl());
+
+        if (request.getRequestTimeout() != 10)
+            postRequestBuilder.setOkHttpClient(new OkHttpClient.Builder()
+                    .connectTimeout(request.getRequestTimeout(), TimeUnit.SECONDS)
+                    .build());
+
+        if (request.getTag() != null)
+            postRequestBuilder.setTag(request.getTag());
+
+        if (request.getToken() != null)
+            postRequestBuilder.addHeaders("token", request.getToken());
+
+        if (request.getRequestJson() != null)
+            postRequestBuilder.addStringBody(request.getRequestJson().toString());
 
         log("in Connect");
-        log("url= " + Requests.get(0).getRequestUrl());
-        log("Token= " + token);
-        log("Request Json= " + Requests.get(0).getRequestJason());
+        log("url= " + request.getRequestUrl());
+        log("Token= " + request.getToken());
+        log("Request Json= " + request.getRequestJson());
 
-        //TODO:
-        // ANRequest.PostRequestBuilder req = AndroidNetworking.post(Requests.get(0).getRequestUrl());
-
-        AndroidNetworking.post(Requests.get(0).getRequestUrl())
-                .addHeaders("token", token)
-                .setTag(getConfig().getLoggingTag())
-                .addStringBody(Requests.get(0).getRequestJason().toString())
-                .build()
+        postRequestBuilder.build()
                 .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
@@ -44,8 +51,8 @@ public class ServerApi extends BaseApi {
                         log(response);
                         JsonObject result = JsonParser.parseString(response).getAsJsonObject();
 
-                        Requests.get(0).setResponseJason(result);
-                        log("response Json= " + Requests.get(0).getResponseJason());
+                        request.setResponseJson(result);
+                        log("response Json= " + request.getResponseJson());
 
                         ServerApi.super.onResponse();
                     }

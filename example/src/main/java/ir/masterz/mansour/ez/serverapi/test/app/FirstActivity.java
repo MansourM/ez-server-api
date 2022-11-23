@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
 import ir.masterz.mansour.ez.serverapi.callback.ApiCallback;
-import ir.masterz.mansour.ez.serverapi.callback.SuccessCallback;
+import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 
 public class FirstActivity extends AppCompatActivity {
 
