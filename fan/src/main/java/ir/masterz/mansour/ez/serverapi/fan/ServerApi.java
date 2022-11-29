@@ -14,7 +14,6 @@ import ir.masterz.mansour.fan.core.error.ANError;
 import ir.masterz.mansour.fan.core.interfaces.StringRequestListener;
 import okhttp3.OkHttpClient;
 
-//TODO better logs
 public class ServerApi extends BaseApi {
     public ServerApi(Context context) {
         super(context);
@@ -22,33 +21,37 @@ public class ServerApi extends BaseApi {
 
     @Override
     public void connect(final Request request) {
+        log("connecting: "+ request.getRequestUrl());
+        log("Token= " + request.getToken());
+        log("Request Json= " + request.getRequestJson());
 
         ANRequest.PostRequestBuilder postRequestBuilder = new ANRequest.PostRequestBuilder(request.getRequestUrl());
 
-        if (request.getRequestTimeout() != 10)
+        if (request.getRequestTimeout() != 10) {
             postRequestBuilder.setOkHttpClient(new OkHttpClient.Builder()
                     .connectTimeout(request.getRequestTimeout(), TimeUnit.SECONDS)
                     .build());
+        }
 
-        if (request.getTag() != null)
+        if (request.getTag() != null) {
             postRequestBuilder.setTag(request.getTag());
+        }
 
-        if (request.getToken() != null)
+        if (request.getToken() != null) {
             postRequestBuilder.addHeaders("token", request.getToken());
+        }
 
-        if (request.getRequestJson() != null)
+        if (request.getRequestJson() != null) {
             postRequestBuilder.addStringBody(request.getRequestJson().toString());
+        }
 
-        log("in Connect");
-        log("url= " + request.getRequestUrl());
-        log("Token= " + request.getToken());
-        log("Request Json= " + request.getRequestJson());
+
 
         postRequestBuilder.build()
                 .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
-                        log("Json connect Completed! : Response");
+                        log("onResponse");
                         log(response);
                         try {
                             JsonObject result = JsonParser.parseString(response).getAsJsonObject();
@@ -62,10 +65,9 @@ public class ServerApi extends BaseApi {
 
                     @Override
                     public void onError(ANError anError) {
-                        log("Json connect Completed! : Error");
+                        log("onError");
 
                         try {
-                            loge("ANError: " + anError.getErrorCode() + "");
                             log("ANError: " + anError.getMessage());
                         } catch (Exception e) {
                             log("ANError: catch!: " + e.getMessage());

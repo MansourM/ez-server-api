@@ -24,7 +24,7 @@ import ir.masterz.mansour.fan.core.error.ANError;
  */
 public interface DownloadListener {
 
-    void onDownloadComplete();
+    void onDownloadComplete(String fileName);
 
     void onError(ANError anError);
 }

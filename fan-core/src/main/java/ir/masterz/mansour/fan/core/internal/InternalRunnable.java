@@ -17,6 +17,10 @@
 
 package ir.masterz.mansour.fan.core.internal;
 
+import static ir.masterz.mansour.fan.core.common.RequestType.DOWNLOAD;
+import static ir.masterz.mansour.fan.core.common.RequestType.MULTIPART;
+import static ir.masterz.mansour.fan.core.common.RequestType.SIMPLE;
+
 import ir.masterz.mansour.fan.core.common.ANRequest;
 import ir.masterz.mansour.fan.core.common.ANResponse;
 import ir.masterz.mansour.fan.core.common.Priority;
@@ -25,12 +29,7 @@ import ir.masterz.mansour.fan.core.core.Core;
 import ir.masterz.mansour.fan.core.error.ANError;
 import ir.masterz.mansour.fan.core.utils.SourceCloseUtil;
 import ir.masterz.mansour.fan.core.utils.Utils;
-
 import okhttp3.Response;
-
-import static ir.masterz.mansour.fan.core.common.RequestType.DOWNLOAD;
-import static ir.masterz.mansour.fan.core.common.RequestType.MULTIPART;
-import static ir.masterz.mansour.fan.core.common.RequestType.SIMPLE;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -111,7 +110,7 @@ public class InternalRunnable implements Runnable {
                         request, okHttpResponse.code()));
                 return;
             }
-            request.updateDownloadCompletion();
+            request.updateDownloadCompletion(okHttpResponse.header("filename", request.getFileName()));
         } catch (Exception e) {
             deliverError(request, Utils.getErrorForConnection(new ANError(e)));
         }

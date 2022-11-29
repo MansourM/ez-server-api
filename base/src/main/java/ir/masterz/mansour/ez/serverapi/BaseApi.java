@@ -110,7 +110,7 @@ public abstract class BaseApi {
     private boolean isDuplicate(Request request) {
         for (Request req : Requests)
             if (req.equals(request)) {
-                log("duplicate request removed = " + req.getRequestUrl());
+                log("Duplicate request removed, url= " + req.getRequestUrl());
                 return true;
             }
         return false;
@@ -126,7 +126,7 @@ public abstract class BaseApi {
 
         Requests.add(request);
         if (Requests.size() > 1)
-            log("api is busy, adding request to que, req url = " + request.getRequestUrl());
+            log("Api is busy, adding request to que, url = " + request.getRequestUrl());
         else
             connect();
     }
@@ -136,7 +136,7 @@ public abstract class BaseApi {
         if (Requests.size() > 0)
             connect();
         else
-            log("request que done!");
+            log("Request que done!");
     }
 
     @Deprecated
@@ -149,8 +149,6 @@ public abstract class BaseApi {
     //success or error message
     protected void onValidResponse() {
         SuccessCallback callback = Requests.get(0).getCustomCallback();
-
-        log("valid r:" + callback.getClass().getSimpleName() + ":" + ResponseCallback.class.getSimpleName());
 
         if (callback instanceof ResponseCallback)
             ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
@@ -165,7 +163,7 @@ public abstract class BaseApi {
     }
 
     protected void onResponseParseError() {
-        loge("unable parse the response string!");
+        loge("Unable parse the response string!");
 
         SuccessCallback callback = Requests.get(0).getCustomCallback();
 

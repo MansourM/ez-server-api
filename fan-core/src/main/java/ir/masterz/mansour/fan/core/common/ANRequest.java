@@ -21,6 +21,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
+import com.google.gson.internal.$Gson$Types;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.lang.reflect.Type;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import ir.masterz.mansour.fan.core.core.Core;
 import ir.masterz.mansour.fan.core.error.ANError;
 import ir.masterz.mansour.fan.core.interfaces.AnalyticsListener;
@@ -44,24 +62,6 @@ import ir.masterz.mansour.fan.core.model.MultipartFileBody;
 import ir.masterz.mansour.fan.core.model.MultipartStringBody;
 import ir.masterz.mansour.fan.core.utils.ParseUtil;
 import ir.masterz.mansour.fan.core.utils.Utils;
-import com.google.gson.internal.$Gson$Types;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.lang.reflect.Type;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -485,7 +485,7 @@ public class ANRequest<T extends ANRequest> {
         };
     }
 
-    public void updateDownloadCompletion() {
+    public void updateDownloadCompletion(String fileName) {
         isDelivered = true;
         if (mDownloadListener != null) {
             if (!isCancelled) {
@@ -494,7 +494,7 @@ public class ANRequest<T extends ANRequest> {
                         @Override
                         public void run() {
                             if (mDownloadListener != null) {
-                                mDownloadListener.onDownloadComplete();
+                                mDownloadListener.onDownloadComplete(fileName);
                             }
                             finish();
                         }
@@ -504,7 +504,7 @@ public class ANRequest<T extends ANRequest> {
                         @Override
                         public void run() {
                             if (mDownloadListener != null) {
-                                mDownloadListener.onDownloadComplete();
+                                mDownloadListener.onDownloadComplete(fileName);
                             }
                             finish();
                         }
@@ -862,7 +862,7 @@ public class ANRequest<T extends ANRequest> {
                     mediaType = MediaType.parse(stringBody.contentType);
                 }
                 builder.addPart(Headers.of("Content-Disposition",
-                        "form-data; name=\"" + entry.getKey() + "\""),
+                                "form-data; name=\"" + entry.getKey() + "\""),
                         RequestBody.create(mediaType, stringBody.value));
             }
             for (HashMap.Entry<String, List<MultipartFileBody>> entry : mMultiPartFileMap.entrySet()) {
@@ -878,7 +878,7 @@ public class ANRequest<T extends ANRequest> {
                     RequestBody requestBody = RequestBody.create(mediaType, fileBody.file);
                     fileName = fileBody.encoding == null ? fileName : URLEncoder.encode(fileName, fileBody.encoding);
                     builder.addPart(Headers.of("Content-Disposition",
-                            "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
+                                    "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
                             requestBody);
                 }
             }
