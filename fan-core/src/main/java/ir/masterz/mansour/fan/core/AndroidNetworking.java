@@ -193,6 +193,10 @@ public class AndroidNetworking {
         return new ANRequest.DownloadBuilder(url, dirPath, fileName);
     }
 
+    public static ANRequest.DownloadBuilder download(String url, String dirPath) {
+        return new ANRequest.DownloadBuilder(url, dirPath);
+    }
+
     /**
      * Method to make upload request
      *

@@ -21,12 +21,22 @@ package ir.masterz.mansour.fan.core.internal;
  * Created by amitshekhar on 22/03/16.
  */
 
+import static ir.masterz.mansour.fan.core.common.Method.DELETE;
+import static ir.masterz.mansour.fan.core.common.Method.GET;
+import static ir.masterz.mansour.fan.core.common.Method.HEAD;
+import static ir.masterz.mansour.fan.core.common.Method.OPTIONS;
+import static ir.masterz.mansour.fan.core.common.Method.PATCH;
+import static ir.masterz.mansour.fan.core.common.Method.POST;
+import static ir.masterz.mansour.fan.core.common.Method.PUT;
+
 import android.content.Context;
 import android.net.TrafficStats;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ir.masterz.mansour.fan.core.common.ANConstants;
 import ir.masterz.mansour.fan.core.common.ANRequest;
@@ -41,14 +51,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static ir.masterz.mansour.fan.core.common.Method.DELETE;
-import static ir.masterz.mansour.fan.core.common.Method.GET;
-import static ir.masterz.mansour.fan.core.common.Method.HEAD;
-import static ir.masterz.mansour.fan.core.common.Method.OPTIONS;
-import static ir.masterz.mansour.fan.core.common.Method.PATCH;
-import static ir.masterz.mansour.fan.core.common.Method.POST;
-import static ir.masterz.mansour.fan.core.common.Method.PUT;
 
 public final class InternalNetworking {
 
@@ -185,6 +187,7 @@ public final class InternalNetworking {
             final long startTime = System.currentTimeMillis();
             final long startBytes = TrafficStats.getTotalRxBytes();
             okHttpResponse = request.getCall().execute();
+            setFileNameFromServer(request, okHttpResponse);
             Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (okHttpResponse.cacheResponse() == null) {
@@ -213,6 +216,27 @@ public final class InternalNetworking {
             throw new ANError(ioe);
         }
         return okHttpResponse;
+    }
+
+    private static void setFileNameFromServer(ANRequest request, Response okHttpResponse) {
+        if (!request.useServerFileName())
+            return;
+        request.setFileName(getFileNameFromResponse(okHttpResponse, request.getFileName()));
+    }
+
+    private static String getFileNameFromResponse(Response response, String defaultFileName) {
+        String filename = defaultFileName == null ? "download" : defaultFileName;
+        //TODO what if there are several "Content-Disposition" headers
+        String contentDisposition = response.header("Content-Disposition");
+        if (contentDisposition != null && !"".equals(contentDisposition)) {
+            // Get filename from the Content-Disposition header.
+            Pattern pattern = Pattern.compile("filename=['\"]?([^'\"\\s]+)['\"]?");
+            Matcher matcher = pattern.matcher(contentDisposition);
+            if (matcher.find()) {
+                filename = matcher.group(1);
+            }
+        }
+        return filename;
     }
 
 

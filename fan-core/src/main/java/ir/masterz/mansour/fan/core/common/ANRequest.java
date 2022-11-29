@@ -115,6 +115,7 @@ public class ANRequest<T extends ANRequest> {
     private boolean isCancelled;
     private boolean isDelivered;
     private boolean isRunning;
+    private boolean UseServerFileName;
     private int mPercentageThresholdForCancelling = 0;
     private JSONArrayRequestListener mJSONArrayRequestListener;
     private JSONObjectRequestListener mJSONObjectRequestListener;
@@ -201,6 +202,7 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        this.UseServerFileName = builder.UseServerFileName;
     }
 
     public ANRequest(MultiPartBuilder builder) {
@@ -570,6 +572,14 @@ public class ANRequest<T extends ANRequest> {
 
     public boolean isCanceled() {
         return isCancelled;
+    }
+
+    public boolean useServerFileName() {
+        return UseServerFileName;
+    }
+
+    public void setFileName(String fileName) {
+        mFileName = fileName;
     }
 
     public boolean isRunning() {
@@ -1440,6 +1450,7 @@ public class ANRequest<T extends ANRequest> {
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private String mDirPath;
         private String mFileName;
+        private boolean UseServerFileName = false;
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
@@ -1450,6 +1461,24 @@ public class ANRequest<T extends ANRequest> {
             this.mUrl = url;
             this.mDirPath = dirPath;
             this.mFileName = fileName;
+        }
+
+        public DownloadBuilder(String url, String dirPath) {
+            this.mUrl = url;
+            this.mDirPath = dirPath;
+            this.UseServerFileName = true;
+        }
+
+        public T setFileName(String fileName) {
+            this.mFileName = fileName;
+            this.UseServerFileName = false;
+            return (T) this;
+        }
+
+        public T useServerFileName(String defaultFileName) {
+            this.mFileName = defaultFileName;
+            this.UseServerFileName = true;
+            return (T) this;
         }
 
         @Override

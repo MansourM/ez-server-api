@@ -110,6 +110,7 @@ public class InternalRunnable implements Runnable {
                         request, okHttpResponse.code()));
                 return;
             }
+
             request.updateDownloadCompletion(okHttpResponse.header("filename", request.getFileName()));
         } catch (Exception e) {
             deliverError(request, Utils.getErrorForConnection(new ANError(e)));
