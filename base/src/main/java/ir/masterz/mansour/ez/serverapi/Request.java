@@ -2,6 +2,8 @@ package ir.masterz.mansour.ez.serverapi;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 
 /**
@@ -27,6 +29,7 @@ public class Request {
         setDefaults();
         setRequestUrl(url);
     }
+
 
     private void setDefaults() {
         RequestTimeout = 10;
@@ -101,19 +104,13 @@ public class Request {
 
     @Override
     public boolean equals(Object other) {
-
         if (!(other instanceof Request))
             return false;
-
-        Request that = (Request) other;
-
-        //handle null with XOR operator ^ (check if only 1 is null) and later by checking if both are null
-        if (this.getRequestJson().isJsonNull() ^ that.getRequestJson().isJsonNull())
-            return false;
-
-        return this.getRequestUrl().equals(that.getRequestUrl())
-                && ((this.getRequestJson().isJsonNull() && that.getRequestJson().isJsonNull()) || (this.getRequestJson().equals(that.getRequestJson())))
-                && this.getToken().equals(that.getToken());
+        return this.hashCode() == ((Request) other).hashCode();
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(RequestUrl, Tag, Token, RequestJson);
+    }
 }

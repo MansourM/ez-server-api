@@ -195,4 +195,5 @@ public abstract class BaseApi {
     //TODO: Image Upload
     //TODO: think about decentralized API requests
     //TODO: instance of checks go in a function?
+    //TODO: wait between retires?
 }

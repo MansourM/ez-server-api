@@ -7,9 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SeApiCallback;
@@ -19,7 +16,6 @@ import ir.masterz.mansour.fan.core.common.Priority;
 import ir.masterz.mansour.fan.core.error.ANError;
 import ir.masterz.mansour.fan.core.interfaces.DownloadListener;
 import ir.masterz.mansour.fan.core.interfaces.DownloadProgressListener;
-import okhttp3.Response;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -58,6 +54,7 @@ public class FirstActivity extends AppCompatActivity {
     private void test1() {
         Log.d(TAG, "test1");
         G.API.request("http://10.0.2.2:8081/test/test1")
+                .setRequestJason(new JsonBuilder("test", "test1").build())
                 .setCustomCallback(new SrApiCallback() {
                     @Override
                     public void onResponse() {
