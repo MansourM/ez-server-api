@@ -107,8 +107,12 @@ public class Request {
 
         Request that = (Request) other;
 
+        //handle null with XOR operator ^ (check if only 1 is null) and later by checking if both are null
+        if (this.getRequestJson().isJsonNull() ^ that.getRequestJson().isJsonNull())
+            return false;
+
         return this.getRequestUrl().equals(that.getRequestUrl())
-                && this.getRequestJson().equals(that.getRequestJson())
+                && ((this.getRequestJson().isJsonNull() && that.getRequestJson().isJsonNull()) || (this.getRequestJson().equals(that.getRequestJson())))
                 && this.getToken().equals(that.getToken());
     }
 
