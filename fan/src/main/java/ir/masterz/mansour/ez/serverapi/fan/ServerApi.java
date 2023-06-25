@@ -22,29 +22,24 @@ public class ServerApi extends BaseApi {
     @Override
     public void connect(final Request request) {
         log("connecting: "+ request.getRequestUrl());
-        log("Token= " + request.getToken());
-        log("Request Json= " + request.getRequestJson());
+        log("Token: " + request.getToken());
+        log("Request json: " + request.getRequestJson());
 
         ANRequest.PostRequestBuilder postRequestBuilder = new ANRequest.PostRequestBuilder(request.getRequestUrl());
 
-        if (request.getRequestTimeout() != 10) {
+        if (request.getRequestTimeout() != 10)
             postRequestBuilder.setOkHttpClient(new OkHttpClient.Builder()
                     .connectTimeout(request.getRequestTimeout(), TimeUnit.SECONDS)
                     .build());
-        }
 
-        if (request.getTag() != null) {
+        if (request.getTag() != null)
             postRequestBuilder.setTag(request.getTag());
-        }
 
-        if (request.getToken() != null) {
+        if (request.getToken() != null)
             postRequestBuilder.addHeaders("token", request.getToken());
-        }
 
-        if (request.getRequestJson() != null) {
+        if (request.getRequestJson() != null)
             postRequestBuilder.addStringBody(request.getRequestJson().toString());
-        }
-
 
 
         postRequestBuilder.build()

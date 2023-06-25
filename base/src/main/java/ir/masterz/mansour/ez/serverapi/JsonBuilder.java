@@ -14,10 +14,6 @@ public class JsonBuilder {
         clear();
         add(key,value);
     }
-    public JsonBuilder(String key, Number value) {
-        clear();
-        add(key,value);
-    }
     public JsonBuilder(String key, boolean value) {
         clear();
         add(key,value);
@@ -26,6 +22,12 @@ public class JsonBuilder {
     public JsonBuilder add(String key, String value) {
         jo.addProperty(key, value);
         return this;
+    }
+
+
+    public JsonBuilder(String key, Number value) {
+        clear();
+        add(key,value);
     }
 
     public JsonBuilder add(String key, Number value) {

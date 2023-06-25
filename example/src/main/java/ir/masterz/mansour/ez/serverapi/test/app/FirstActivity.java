@@ -1,11 +1,14 @@
 package ir.masterz.mansour.ez.serverapi.test.app;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
+
+import java.util.Locale;
 
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
@@ -26,6 +29,13 @@ public class FirstActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
 
+        /*Locale locale = new Locale("en");
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());*/
+
         Log.d(TAG, "onCreate");
     }
 
@@ -38,6 +48,7 @@ public class FirstActivity extends AppCompatActivity {
         findViewById(R.id.btn_malfored).setOnClickListener(v -> malformedResponse());
         findViewById(R.id.btn_test_1).setOnClickListener(v -> test1());
         findViewById(R.id.btn_test_2).setOnClickListener(v -> test2());
+        findViewById(R.id.btn_test_3).setOnClickListener(v -> test3());
         //errorMessageWithData();
     }
 
@@ -167,5 +178,12 @@ public class FirstActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+
+    private void test3(){
+        String EN = "2020";
+        String FA = "۱۰۱۰";
+        Log.d(TAG,EN);
+        Log.d(TAG,FA);
     }
 }
