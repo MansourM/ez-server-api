@@ -64,6 +64,7 @@ public class ServerApi extends BaseApi {
 
                         try {
                             log("ANError: " + anError.getMessage());
+                            anError.printStackTrace();
                         } catch (Exception e) {
                             log("ANError: catch!: " + e.getMessage());
                             e.printStackTrace();
