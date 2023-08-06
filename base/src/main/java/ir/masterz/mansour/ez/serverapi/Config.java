@@ -4,7 +4,6 @@ public class Config {
     private boolean LoggingEnabled = false;
     private String Tag = "ez_server_api";
 
-    private int RetryCount = 2;
     private boolean AllowDuplicateRequests = false;
 
     public void setLogging(boolean isEnabled) {
@@ -21,14 +20,6 @@ public class Config {
 
     public String getLoggingTag() {
         return Tag;
-    }
-
-    public void setRetryCount(int retryCount) {
-        RetryCount = retryCount;
-    }
-
-    public int getRetryCount() {
-        return RetryCount;
     }
 
     public boolean allowDuplicateRequests() {

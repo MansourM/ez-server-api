@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'ir.masterz.mansour.ez.serverapi'
-version = '0.5.0'
+version = '0.5.1'
 
 ext {
     //TODO: upgrade to okhttp4?

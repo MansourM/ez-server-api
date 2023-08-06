@@ -23,6 +23,11 @@ public class RequestBuilder {
         request = new Request(url);
     }
 
+    public RequestBuilder setMethod(int methodId) {
+        request.setMethod(methodId);
+        return this;
+    }
+
     public RequestBuilder setTag(String tag) {
         request.setTag(tag);
         return this;

@@ -11,8 +11,10 @@ import com.google.gson.JsonObject;
 import java.util.Locale;
 
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
+import ir.masterz.mansour.ez.serverapi.Request;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SeApiCallback;
+import ir.masterz.mansour.ez.serverapi.callback.composit.SerApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SrApiCallback;
 import ir.masterz.mansour.fan.core.AndroidNetworking;
 import ir.masterz.mansour.fan.core.common.Priority;
@@ -180,20 +182,28 @@ public class FirstActivity extends AppCompatActivity {
                 });
     }
 
-    private void test3(){
+    private void test3() {
         Log.d(TAG, "test1");
-        G.API.request("http://192.168.1.22:8084/api/v1/ping")
-                .setRequestJason(new JsonBuilder("test", "test1").build())
-                .setCustomCallback(new SrApiCallback() {
+        G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
+                .setMethod(Request.Method.GET)
+                .setCustomCallback(new SerApiCallback() {
+                    @Override
+                    public void onErrorMessage(String message, JsonObject response) {
+                        Log.d(TAG, "error");
+                        Log.d(TAG, response.toString());
+                    }
+
                     @Override
                     public void onResponse() {
                         Log.d(TAG, "response");
                     }
 
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
                         Log.d(TAG, "success");
+                        Log.d(TAG, response.toString());
                     }
+
                 });
     }
 }

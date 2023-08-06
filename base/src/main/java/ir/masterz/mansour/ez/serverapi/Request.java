@@ -13,6 +13,8 @@ import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 public class Request {
 
     private String RequestUrl;
+
+    private int MethodId;
     private String Tag;
     private String Token;
     private JsonObject RequestJson;
@@ -21,17 +23,26 @@ public class Request {
     private boolean Success;
     private int RequestTimeout;
 
+    public static class Method {
+        public static final int GET = 0;
+        public static final int POST = 1;
+        public static final int DELETE = 2;
+        public static final int PUT = 3;
+        public static final int PATCH = 4;
+    }
+
     public Request() {
         setDefaults();
     }
 
     public Request(String url) {
         setDefaults();
-        setRequestUrl(url);
+        setUrl(url);
     }
 
 
     private void setDefaults() {
+        MethodId = Method.POST;
         RequestTimeout = 10;
         ResponseJson = new JsonObject();
         Success = false;
@@ -53,12 +64,20 @@ public class Request {
         Success = true;
     }
 
-    public String getRequestUrl() {
+    public String geUrl() {
         return RequestUrl;
     }
 
-    public void setRequestUrl(String requestUrl) {
+    public void setUrl(String requestUrl) {
         RequestUrl = requestUrl;
+    }
+
+    public int getMethod() {
+        return MethodId;
+    }
+
+    public void setMethod(int methodId) {
+        MethodId = methodId;
     }
 
     public String getToken() {
@@ -106,7 +125,7 @@ public class Request {
     public boolean equals(Object other) {
         if (!(other instanceof Request))
             return false;
-        return this.hashCode() == ((Request) other).hashCode();
+        return this.hashCode() == other.hashCode();
     }
 
     @Override

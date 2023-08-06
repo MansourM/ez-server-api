@@ -16,7 +16,6 @@ import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 public abstract class BaseApi {
 
     private final Context app_context;
-    private int retriesLeft;
 
     private final Config Config;
     private CallbackDefaultHandler CallbackDefaultHandler;
@@ -26,7 +25,6 @@ public abstract class BaseApi {
     protected BaseApi(Context context) {
         app_context = context;
         Config = new Config();
-        retriesLeft = Config.getRetryCount();
         Requests = new ArrayList<>();
     }
 
@@ -58,28 +56,6 @@ public abstract class BaseApi {
             Log.e(Config.getLoggingTag(), msg);
     }
 
-    protected void retry() {
-        retriesLeft--;
-        if (retriesLeft > 0) {
-            log("Retrying, Retries Left :" + retriesLeft);
-            connect(getCurrentRequest());
-            return;
-        }
-
-        //Handling onFailure and onResponse before finishing current "failed" request
-        if (getCurrentRequest().getCustomCallback() instanceof ResponseCallback)
-            ((ResponseCallback) getCurrentRequest().getCustomCallback()).onResponse();
-
-        if (getCurrentRequest().getCustomCallback() instanceof FailureCallback)
-            ((FailureCallback) getCurrentRequest().getCustomCallback()).onFailure();
-        else if (CallbackDefaultHandler != null)
-            CallbackDefaultHandler.handleFailure();
-
-        //reset retries go next
-        retriesLeft = Config.getRetryCount();
-        processNextRequest();
-    }
-
     public RequestBuilder request(String url) {
         log("Building Request!");
         return new RequestBuilder(url, new CallBackRequestBuilt() {
@@ -93,7 +69,7 @@ public abstract class BaseApi {
     private boolean isDuplicate(Request request) {
         for (Request req : Requests)
             if (req.equals(request)) {
-                log("Duplicate request removed, url= " + req.getRequestUrl());
+                log("Duplicate request removed, url: " + req.geUrl());
                 return true;
             }
         return false;
@@ -109,30 +85,26 @@ public abstract class BaseApi {
 
         Requests.add(request);
         if (Requests.size() > 1)
-            log("Api is busy, adding request to que, url = " + request.getRequestUrl());
+            log("Api is busy, adding request to que, url: " + request.geUrl());
         else
-            connect();
+            connect(getCurrentRequest());
     }
 
     protected void processNextRequest() {
         Requests.remove(0);
         if (Requests.size() > 0)
-            connect();
+            connect(getCurrentRequest());
         else
             log("Request que done!");
-    }
-
-    @Deprecated
-    protected void connect() {
-        connect(getCurrentRequest());
     }
 
     protected abstract void connect(final Request request);
 
 
-    private Request getCurrentRequest(){
+    private Request getCurrentRequest() {
         return Requests.get(0);
     }
+
     //success or error message
     protected void onValidResponse() {
         SuccessCallback callback = getCurrentRequest().getCustomCallback();
@@ -152,7 +124,7 @@ public abstract class BaseApi {
                     callback,
                     message,
                     getCurrentRequest().getResponseJson()
-                    );
+            );
 
         getCurrentRequest().success();
         processNextRequest();
@@ -189,7 +161,4 @@ public abstract class BaseApi {
 
     //TODO: Using it with your own JAVA Object - JSON Parser
     //TODO: Image Upload
-    //TODO: think about decentralized API requests
-    //TODO: instance of checks go in a function?
-    //TODO: wait between retires?
 }
