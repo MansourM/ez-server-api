@@ -28,5 +28,5 @@ android {
 dependencies {
     api "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttp3Version"
     implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 }
