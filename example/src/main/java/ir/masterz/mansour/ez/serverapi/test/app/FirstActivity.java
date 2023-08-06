@@ -181,9 +181,19 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void test3(){
-        String EN = "2020";
-        String FA = "۱۰۱۰";
-        Log.d(TAG,EN);
-        Log.d(TAG,FA);
+        Log.d(TAG, "test1");
+        G.API.request("http://192.168.1.22:8084/api/v1/ping")
+                .setRequestJason(new JsonBuilder("test", "test1").build())
+                .setCustomCallback(new SrApiCallback() {
+                    @Override
+                    public void onResponse() {
+                        Log.d(TAG, "response");
+                    }
+
+                    @Override
+                    public void onSuccess(String message, JsonObject data) {
+                        Log.d(TAG, "success");
+                    }
+                });
     }
 }

@@ -1,57 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '7.4.1' apply false
-    id 'com.android.library' version '7.4.1' apply false
-    id 'java-library'
-    id 'maven-publish'
+    id 'com.android.application' version '7.4.2' apply false
+    id 'com.android.library' version '7.4.2' apply false
 }
 
 group = 'ir.masterz.mansour.ez.serverapi'
-version = '0.4.9'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifactId = 'library'
-            pom {
-                name = 'EZ Server Api'
-                description = 'This is a WIP api, developed to make specific REST calls easy and fast to code.'
-                url = 'https://github.com/MansourM/ez-server-api'
-                licenses {
-                    license {
-                        name = 'MIT'
-                        url = 'https://github.com/MansourM/ez-server-api/blob/master/LICENSE'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'MansourM'
-                        name = 'Seyed Mansour Mirbehbahani'
-                        email = 'sm.mirbehbahani@gmail.com'
-                    }
-                }
-            }
-            afterEvaluate {
-                println("Components: " + components*.name)
-                from components.java
-            }
-        }
-    }
-    repositories {
-        maven {
-            name = 'localrepo'
-            url = "${project.buildDir}/localrepo"
-        }
-    }
-}
+version = '0.5.0'
 
 ext {
     //TODO: upgrade to okhttp4?
     okHttp3Version = "3.14.9"
     gsonVersion = "2.8.9"
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }

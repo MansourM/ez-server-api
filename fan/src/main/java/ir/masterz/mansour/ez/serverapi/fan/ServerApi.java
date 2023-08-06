@@ -13,6 +13,7 @@ import ir.masterz.mansour.fan.core.common.ANRequest;
 import ir.masterz.mansour.fan.core.error.ANError;
 import ir.masterz.mansour.fan.core.interfaces.StringRequestListener;
 import okhttp3.OkHttpClient;
+import okio.Okio;
 
 public class ServerApi extends BaseApi {
     public ServerApi(Context context) {
@@ -21,7 +22,7 @@ public class ServerApi extends BaseApi {
 
     @Override
     public void connect(final Request request) {
-        log("connecting: "+ request.getRequestUrl());
+        log("connecting: " + request.getRequestUrl());
         log("Token: " + request.getToken());
         log("Request json: " + request.getRequestJson());
 
@@ -53,6 +54,7 @@ public class ServerApi extends BaseApi {
                             request.setResponseJson(result);
                             ServerApi.super.onValidResponse();
                         } catch (Exception e) {
+                            log("onResponse: catch!: " + e.getMessage());
                             e.printStackTrace();
                             ServerApi.super.onResponseParseError();
                         }
@@ -63,13 +65,15 @@ public class ServerApi extends BaseApi {
                         log("onError");
 
                         try {
-                            log("ANError: " + anError.getMessage());
-                            anError.printStackTrace();
+                            JsonObject result = JsonParser.parseString(anError.getErrorBody()).getAsJsonObject();
+                            request.setResponseJson(result);
+                            ServerApi.super.onValidResponse();
                         } catch (Exception e) {
-                            log("ANError: catch!: " + e.getMessage());
+                            log("onError: catch!: " + e.getMessage());
                             e.printStackTrace();
+                            ServerApi.super.onResponseParseError();
+                            retry();
                         }
-                        retry();
                     }
                 });
     }

@@ -62,39 +62,22 @@ public abstract class BaseApi {
         retriesLeft--;
         if (retriesLeft > 0) {
             log("Retrying, Retries Left :" + retriesLeft);
-            connect(Requests.get(0));
+            connect(getCurrentRequest());
             return;
         }
 
         //Handling onFailure and onResponse before finishing current "failed" request
-        if (Requests.get(0).getCustomCallback() instanceof ResponseCallback)
-            ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
+        if (getCurrentRequest().getCustomCallback() instanceof ResponseCallback)
+            ((ResponseCallback) getCurrentRequest().getCustomCallback()).onResponse();
 
-        if (Requests.get(0).getCustomCallback() instanceof FailureCallback)
-            ((FailureCallback) Requests.get(0).getCustomCallback()).onFailure();
+        if (getCurrentRequest().getCustomCallback() instanceof FailureCallback)
+            ((FailureCallback) getCurrentRequest().getCustomCallback()).onFailure();
         else if (CallbackDefaultHandler != null)
             CallbackDefaultHandler.handleFailure();
 
         //reset retries go next
         retriesLeft = Config.getRetryCount();
         processNextRequest();
-    }
-
-    protected int getStatus() {
-        return Requests.get(0).getResponseJson().get("status").getAsInt();
-    }
-
-
-    protected String getMessage() {
-        return Requests.get(0).getResponseJson().get("message").getAsString();
-    }
-
-    protected JsonObject getData() {
-        try {
-            return Requests.get(0).getResponseJson().get("data").getAsJsonObject();
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     public RequestBuilder request(String url) {
@@ -120,7 +103,7 @@ public abstract class BaseApi {
         if (isDuplicate(request) && !Config.allowDuplicateRequests()) {
             SuccessCallback callback = request.getCustomCallback();
             if (callback instanceof ResponseCallback)
-                ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
+                ((ResponseCallback) getCurrentRequest().getCustomCallback()).onResponse();
             return;
         }
 
@@ -141,37 +124,50 @@ public abstract class BaseApi {
 
     @Deprecated
     protected void connect() {
-        connect(Requests.get(0));
+        connect(getCurrentRequest());
     }
 
     protected abstract void connect(final Request request);
 
+
+    private Request getCurrentRequest(){
+        return Requests.get(0);
+    }
     //success or error message
     protected void onValidResponse() {
-        SuccessCallback callback = Requests.get(0).getCustomCallback();
+        SuccessCallback callback = getCurrentRequest().getCustomCallback();
+        String status = getCurrentRequest().getResponseJson().get("status").getAsString();
+        String message = getCurrentRequest().getResponseJson().get("message").getAsString();
 
         if (callback instanceof ResponseCallback)
-            ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
+            ((ResponseCallback) getCurrentRequest().getCustomCallback()).onResponse();
 
-        if (getStatus() != 0)
-            onSuccess(callback, getMessage(), getData());
+        if (status.equals("success"))
+            onSuccess(callback,
+                    message,
+                    getCurrentRequest().getResponseJson()
+            );
         else
-            onErrorMessage(callback, getMessage(), getData());
+            onErrorMessage(
+                    callback,
+                    message,
+                    getCurrentRequest().getResponseJson()
+                    );
 
-        Requests.get(0).success();
+        getCurrentRequest().success();
         processNextRequest();
     }
 
     protected void onResponseParseError() {
         loge("Unable parse the response string!");
 
-        SuccessCallback callback = Requests.get(0).getCustomCallback();
+        SuccessCallback callback = getCurrentRequest().getCustomCallback();
 
         if (callback instanceof ResponseCallback)
-            ((ResponseCallback) Requests.get(0).getCustomCallback()).onResponse();
+            ((ResponseCallback) getCurrentRequest().getCustomCallback()).onResponse();
 
         if (callback instanceof FailureCallback)
-            ((FailureCallback) Requests.get(0).getCustomCallback()).onFailure();
+            ((FailureCallback) getCurrentRequest().getCustomCallback()).onFailure();
         else if (CallbackDefaultHandler != null)
             CallbackDefaultHandler.handleFailure();
 
@@ -180,7 +176,7 @@ public abstract class BaseApi {
 
     protected void onErrorMessage(SuccessCallback callback, String message, JsonObject data) {
         if (callback instanceof ErrorCallback)
-            ((ErrorCallback) Requests.get(0).getCustomCallback()).onErrorMessage(message, data);
+            ((ErrorCallback) getCurrentRequest().getCustomCallback()).onErrorMessage(message, data);
         else if (CallbackDefaultHandler != null)
             CallbackDefaultHandler.handleErrorMessage(message, data);
     }
