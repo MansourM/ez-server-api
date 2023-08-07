@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.library'
-    id 'maven-publish'
 }
 
 android {
@@ -20,12 +19,6 @@ android {
         }
     }
 
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
-    }
-
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
@@ -35,26 +28,6 @@ android {
     }
 
     namespace 'ir.masterz.mansour.ez.serverapi.fan'
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                groupId = project.group
-                artifactId = 'fan'
-                version = project.version
-                println("Components: " + components*.name)
-                from components.release
-            }
-        }
-        repositories {
-            maven {
-                name = 'myrepo'
-                url = "${project.buildDir}/myrepo"
-            }
-        }
-    }
 }
 
 dependencies {
