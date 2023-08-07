@@ -1,4 +1,5 @@
 plugins {
+    id 'maven-publish'
     id 'com.android.library'
 }
 
@@ -19,6 +20,12 @@ android {
         }
     }
 
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
@@ -28,6 +35,26 @@ android {
     }
 
     namespace 'ir.masterz.mansour.ez.serverapi'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = project.group
+                artifactId = 'base'
+                version = project.version
+                println("Components: " + components*.name)
+                from components.release
+            }
+        }
+        repositories {
+            maven {
+                name = 'myrepo'
+                url = "${project.buildDir}/myrepo"
+            }
+        }
+    }
 }
 
 dependencies {

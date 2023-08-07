@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 
 android {
@@ -36,22 +37,22 @@ android {
     namespace 'ir.masterz.mansour.ez.serverapi.fan'
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = 'ir.masterz.mansour.ez.serverapi'
-            artifactId = 'fan'
-            version = '0.5.0'
-
-            afterEvaluate {
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = project.group
+                artifactId = 'fan'
+                version = project.version
+                println("Components: " + components*.name)
                 from components.release
             }
         }
-    }
-    repositories {
-        maven {
-            name = 'myrepo'
-            url = "${project.buildDir}/repo"
+        repositories {
+            maven {
+                name = 'myrepo'
+                url = "${project.buildDir}/myrepo"
+            }
         }
     }
 }

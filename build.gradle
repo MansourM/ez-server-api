@@ -11,3 +11,13 @@ ext {
     gsonVersion = "2.8.9"
     libVersion = "0.5.4"
 }
+
+allprojects {
+    version = "0.5.0"
+    group = 'ir.masterz.mansour.ez.serverapi'
+
+}
+
+subprojects {
+
+}
