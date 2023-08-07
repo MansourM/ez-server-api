@@ -15,6 +15,7 @@ import ir.masterz.mansour.ez.serverapi.Request;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SeApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SerApiCallback;
+import ir.masterz.mansour.ez.serverapi.callback.composit.SerfApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SrApiCallback;
 import ir.masterz.mansour.fan.core.AndroidNetworking;
 import ir.masterz.mansour.fan.core.common.Priority;
@@ -185,25 +186,34 @@ public class FirstActivity extends AppCompatActivity {
     private void test3() {
         Log.d(TAG, "test1");
         G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
-                .setMethod(URL.App.ping().method)
-                .setCustomCallback(new SerApiCallback() {
+                .setMethod(Request.Method.GET)
+                .setRequestJason(new JsonBuilder("key1","value1").add("key2","value2").build())
+                .setRequestTimeout(10) //seconds
+                .setToken("public") //adds "token" to header
+                .setCustomCallback(new SerfApiCallback() {
+
+                    @Override
+                    public void onSuccess(String message, JsonObject response) {
+                        //response code is //200-300
+                    }
+                    @Override
+                    public void onFailure() {
+                        //no proper response
+                        //e.g. no internet or parse error
+                    }
+
                     @Override
                     public void onErrorMessage(String message, JsonObject response) {
-                        Log.d(TAG, "error");
-                        Log.d(TAG, response.toString());
+                        //response code is //400-500
                     }
 
                     @Override
                     public void onResponse() {
-                        Log.d(TAG, "response");
+                        //request in finished
+                        //used for thins like loading(false)
                     }
-
-                    @Override
-                    public void onSuccess(String message, JsonObject response) {
-                        Log.d(TAG, "success");
-                        Log.d(TAG, response.toString());
-                    }
-
                 });
+
+
     }
 }
