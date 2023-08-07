@@ -121,13 +121,32 @@ G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
 `AR.java`
 
 ```java
+//Api Request Helper class
+public class AR {
+    public static String getBaseIp() {
+        return AppSettings.getInstance().getServerIp();
+    }
+
+    public static void setBaseIp(String baseIp) {
+        AppSettings.getInstance().setServerIp(baseIp);
+    }
+
+    public static String getBasePort() {
+        return AppSettings.getInstance().getServerPort();
+    }
+
+    public static void setBasePort(String port) {
+        AppSettings.getInstance().setServerPort(port);
+    }
+    
     public static String baseUrl() {
         String Prefix = "https://";
         if (BuildConfig.DEBUG && AppSettings.getInstance().useHttpDebug())
             Prefix = "http://";
         return Prefix + getBaseIp() + ":" + getBasePort() + "/api/v1";
     }
-        public static class App {
+
+    public static class App {
         public static String baseUrl() {
             return AR.baseUrl() + "/app";
         }
@@ -136,6 +155,7 @@ G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
             return new UrlHelper(baseUrl() + "/ping", Request.Method.GET);
         }
     }
+}
 
 ```
 
@@ -143,7 +163,7 @@ G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
 
 ```java
 //There are custom callbacks based on what we need this one uses success callback (the only callback we can access in onSuccess, onError and onfailure use the default bahviour defined in G.java)
-G.API.request(URL.App.ping())
+G.API.request(AR.App.ping())
                 .setCustomCallback((message, response) -> {
                     
                 });
