@@ -66,6 +66,16 @@ public abstract class BaseApi {
         });
     }
 
+    public RequestBuilder request(UrlHelper urlHelper) {
+        log("Building Request!");
+        return new RequestBuilder(urlHelper, new CallBackRequestBuilt() {
+            @Override
+            public void requestBuilt(Request request) {
+                addRequestToQue(request);
+            }
+        });
+    }
+
     private boolean isDuplicate(Request request) {
         for (Request req : Requests)
             if (req.equals(request)) {

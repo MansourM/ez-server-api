@@ -1,5 +1,8 @@
 package ir.masterz.mansour.ez.serverapi.test.app;
 
+import ir.masterz.mansour.ez.serverapi.Request;
+import ir.masterz.mansour.ez.serverapi.UrlHelper;
+
 public class URL {
 
     public static final String BASE = "http://dotat.ir/v1";
@@ -9,5 +12,15 @@ public class URL {
 
     public static final String ERROR_MESSAGE = BASE + "/test/errorMessage";
     public static final String ERROR_MESSAGE_WITH_DATA = BASE + "/test/errorMessageWithData";
+
+    public static class App {
+        public static String baseUrl() {
+            return BASE + "/app";
+        }
+
+        public static UrlHelper ping() {
+            return new UrlHelper(baseUrl() + "/ping", Request.Method.GET);
+        }
+    }
 
 }

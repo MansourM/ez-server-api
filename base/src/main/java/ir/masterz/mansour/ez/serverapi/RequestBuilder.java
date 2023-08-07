@@ -23,6 +23,12 @@ public class RequestBuilder {
         request = new Request(url);
     }
 
+    public RequestBuilder(UrlHelper urlHelper, CallBackRequestBuilt callback) {
+        Callback = callback;
+        request = new Request(urlHelper.url);
+        request.setMethod(urlHelper.method);
+    }
+
     public RequestBuilder setMethod(int methodId) {
         request.setMethod(methodId);
         return this;

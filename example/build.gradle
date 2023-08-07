@@ -6,11 +6,11 @@ plugins {
 android {
     compileSdk 33
     defaultConfig {
-        applicationId "ir.masterz.mansour.ez.serverapi.test.app"
+        applicationId project.group + ".test.app"
         minSdkVersion 16
         targetSdkVersion 33
         versionCode 1
-        versionName "0.5.4"
+        versionName project.version
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
     }
@@ -34,7 +34,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    namespace 'ir.masterz.mansour.ez.serverapi.test.app'
+    namespace project.group + ".test.app"
 }
 
 dependencies {

@@ -185,7 +185,7 @@ public class FirstActivity extends AppCompatActivity {
     private void test3() {
         Log.d(TAG, "test1");
         G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
-                .setMethod(Request.Method.GET)
+                .setMethod(URL.App.ping().method)
                 .setCustomCallback(new SerApiCallback() {
                     @Override
                     public void onErrorMessage(String message, JsonObject response) {

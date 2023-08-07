@@ -8,13 +8,11 @@ ext {
     //TODO: upgrade to okhttp4?
     okHttp3Version = "3.14.9"
     gsonVersion = "2.8.9"
-    libVersion = "0.5.4"
 }
 
 allprojects {
-    version = "0.5.0"
+    version = "0.5.5"
     group = 'ir.masterz.mansour.ez.serverapi'
-
 }
 
 subprojects {
