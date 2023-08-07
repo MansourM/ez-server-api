@@ -3,12 +3,15 @@ plugins {
 }
 
 android {
+    compileSdk 33
     defaultConfig {
         applicationId "ir.masterz.mansour.ez.serverapi.test.app"
         minSdkVersion 16
         targetSdkVersion 33
         versionCode 1
         versionName "0.5.4"
+        // Required when setting minSdkVersion to 20 or lower
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -22,6 +25,14 @@ android {
         }
     }
 
+    compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     namespace 'ir.masterz.mansour.ez.serverapi.test.app'
 }
 
@@ -33,6 +44,9 @@ dependencies {
 
     //local dependency
     implementation project(path: ':fan')
+
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
     //online dependency
     //implementation 'com.github.MansourM.ez-server-api:ion:0.1.4'
