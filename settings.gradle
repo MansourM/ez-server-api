@@ -1,8 +1,9 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        gradlePluginPortal()
+        jcenter()
     }
 }
 dependencyResolutionManagement {
