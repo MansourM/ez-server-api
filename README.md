@@ -27,7 +27,7 @@ Add it in your root build.gradle at the end of repositories:
 ~"ion" uses[ ION](https://github.com/koush/ion " ION") for networking (more utility but needs google play service to work)~
 
 ##### Current Version
-[![](https://jitpack.io/v/MansourM/ez-server-api.svg)](https://jitpack.io/#MansourM/ez-server-api)
+[![](https://jitpack.io/v/MansourM/ez-server-api.svg)](https://jitpack.io/#MansourM/ez-server-api) `0.5.6` !
 
 #### examples
 
