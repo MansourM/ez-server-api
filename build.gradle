@@ -8,5 +8,5 @@ ext {
     //TODO: upgrade to okhttp4?
     okHttp3Version = "3.14.9"
     gsonVersion = "2.8.9"
-    libVersion = "0.5.1"
+    libVersion = "0.5.4"
 }
