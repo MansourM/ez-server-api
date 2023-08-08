@@ -1,5 +1,7 @@
 package ir.masterz.mansour.ez.serverapi;
 
+import static ir.masterz.mansour.ez.serverapi.Config.TAG;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -61,6 +63,8 @@ public abstract class BaseApi {
         return new RequestBuilder(url, new CallBackRequestBuilt() {
             @Override
             public void requestBuilt(Request request) {
+                if (request.getMethod() == Request.Method.GET && request.getRequestJson() != null)
+                    Log.w(TAG, "GET requests can't have a string body, use query params instead!, url: " + request.getUrl());
                 addRequestToQue(request);
             }
         });
@@ -79,7 +83,7 @@ public abstract class BaseApi {
     private boolean isDuplicate(Request request) {
         for (Request req : Requests)
             if (req.equals(request)) {
-                log("Duplicate request removed, url: " + req.geUrl());
+                log("Duplicate request removed, url: " + req.getUrl());
                 return true;
             }
         return false;
@@ -95,7 +99,7 @@ public abstract class BaseApi {
 
         Requests.add(request);
         if (Requests.size() > 1)
-            log("Api is busy, adding request to que, url: " + request.geUrl());
+            log("Api is busy, adding request to que, url: " + request.getUrl());
         else
             connect(getCurrentRequest());
     }

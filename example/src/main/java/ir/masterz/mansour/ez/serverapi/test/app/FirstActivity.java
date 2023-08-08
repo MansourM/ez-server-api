@@ -186,7 +186,7 @@ public class FirstActivity extends AppCompatActivity {
     private void test3() {
         Log.d(TAG, "test1");
         G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
-                .setMethod(Request.Method.GET)
+                .setMethod(Request.Method.POST)
                 .setRequestJason(new JsonBuilder("key1","value1").add("key2","value2").build())
                 .setRequestTimeout(10) //seconds
                 .setToken("public") //adds "token" to header

@@ -64,7 +64,7 @@ public class Request {
         Success = true;
     }
 
-    public String geUrl() {
+    public String getUrl() {
         return RequestUrl;
     }
 

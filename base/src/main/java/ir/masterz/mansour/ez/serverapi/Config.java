@@ -2,7 +2,7 @@ package ir.masterz.mansour.ez.serverapi;
 
 public class Config {
     private boolean LoggingEnabled = false;
-    private String Tag = "ez_server_api";
+    public static String TAG = "ez_server_api";
 
     private boolean AllowDuplicateRequests = false;
 
@@ -15,11 +15,11 @@ public class Config {
     }
 
     public void setLoggingTag(String tag) {
-        Tag = tag;
+        TAG = tag;
     }
 
     public String getLoggingTag() {
-        return Tag;
+        return TAG;
     }
 
     public boolean allowDuplicateRequests() {

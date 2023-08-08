@@ -8,4 +8,9 @@ public class UrlHelper {
         this.url = url;
         method = methodId;
     }
+
+    public UrlHelper(String url) {
+        this.url = url;
+        method = Request.Method.POST;
+    }
 }

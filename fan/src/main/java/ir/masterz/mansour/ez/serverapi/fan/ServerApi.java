@@ -25,19 +25,19 @@ public class ServerApi extends BaseApi {
 
         switch (request.getMethod()) {
             case Request.Method.GET:
-                setBuilder(new ANRequest.GetRequestBuilder(request.geUrl()),request);
+                setBuilder(new ANRequest.GetRequestBuilder(request.getUrl()),request);
                 break;
             case Request.Method.POST:
-                setBuilder(new ANRequest.PostRequestBuilder<>(request.geUrl()),request);
+                setBuilder(new ANRequest.PostRequestBuilder<>(request.getUrl()),request);
                 break;
             case Request.Method.DELETE:
-                setBuilder(new ANRequest.DeleteRequestBuilder(request.geUrl()),request);
+                setBuilder(new ANRequest.DeleteRequestBuilder(request.getUrl()),request);
                 break;
             case Request.Method.PUT:
-                setBuilder(new ANRequest.PutRequestBuilder(request.geUrl()),request);
+                setBuilder(new ANRequest.PutRequestBuilder(request.getUrl()),request);
                 break;
             case Request.Method.PATCH:
-                setBuilder(new ANRequest.PatchRequestBuilder(request.geUrl()),request);
+                setBuilder(new ANRequest.PatchRequestBuilder(request.getUrl()),request);
                 break;
         }
     }
@@ -54,7 +54,7 @@ public class ServerApi extends BaseApi {
         if (request.getToken() != null)
             rb.addHeaders("token", request.getToken());
 
-        log("connecting: " + request.geUrl());
+        log("connecting: " + request.getUrl());
         log("Token: " + request.getToken());
         log("Request json: " + request.getRequestJson());
     }
