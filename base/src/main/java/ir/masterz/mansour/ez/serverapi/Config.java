@@ -1,21 +1,30 @@
 package ir.masterz.mansour.ez.serverapi;
 
-public class Config {
-    private boolean LoggingEnabled = false;
-    public static String TAG = "ez_server_api";
+import java.util.HashMap;
 
+public class Config {
+    public static String TAG = "ez_server_api";
+    private boolean LoggingEnabled = false;
     private boolean AllowDuplicateRequests = false;
 
-    public void setLogging(boolean isEnabled) {
+    private HashMap<String, String> Headers;
+
+    public Config() {
+        Headers = new HashMap<>();
+    }
+
+    public Config setLogging(boolean isEnabled) {
         LoggingEnabled = isEnabled;
+        return this;
     }
 
     public boolean loggingEnabled() {
         return LoggingEnabled;
     }
 
-    public void setLoggingTag(String tag) {
+    public Config setLoggingTag(String tag) {
         TAG = tag;
+        return this;
     }
 
     public String getLoggingTag() {
@@ -26,8 +35,37 @@ public class Config {
         return AllowDuplicateRequests;
     }
 
-    public void setAllowDuplicateRequests(boolean allow) {
+    public Config setAllowDuplicateRequests(boolean allow) {
         AllowDuplicateRequests = allow;
+        return this;
+    }
+
+    //Adds Header: ["Accept" => "application/json"]
+    public Config setHeaderAcceptJson() {
+        Headers.put("Accept", "application/json");
+        return this;
+    }
+
+    public Config setHeaders(HashMap<String, String> headers) {
+        Headers = headers;
+        return this;
+    }
+
+    public HashMap<String, String> getHeaders() {
+        return Headers;
+    }
+
+    public Config addHeader(String key, String value) {
+        Headers.put(key, value);
+        return this;
+    }
+
+    public String getHeader(String key) {
+        return Headers.get(key);
+    }
+
+    public void clearHeaders() {
+        Headers.clear();
     }
 
 }

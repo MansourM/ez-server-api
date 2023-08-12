@@ -24,8 +24,11 @@ public class G extends Application {
         APP_CONTEXT = getApplicationContext();
 
         API = new ServerApi(APP_CONTEXT);
-        API.getConfig().setLogging(true);
-        API.getConfig().setLoggingTag("Mansour_API");
+        API.getConfig()
+                .setLogging(true)
+                .setLoggingTag("Mansour_API")
+                .setHeaderAcceptJson();
+
         API.setErrorMessageHandler(new MyApiCallbackDefaultHandler());
 
     }

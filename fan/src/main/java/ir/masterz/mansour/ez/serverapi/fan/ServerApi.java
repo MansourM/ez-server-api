@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import ir.masterz.mansour.ez.serverapi.BaseApi;
@@ -25,19 +26,19 @@ public class ServerApi extends BaseApi {
 
         switch (request.getMethod()) {
             case Request.Method.GET:
-                setBuilder(new ANRequest.GetRequestBuilder(request.getUrl()),request);
+                setBuilder(new ANRequest.GetRequestBuilder(request.getUrl()), request);
                 break;
             case Request.Method.POST:
-                setBuilder(new ANRequest.PostRequestBuilder<>(request.getUrl()),request);
+                setBuilder(new ANRequest.PostRequestBuilder<>(request.getUrl()), request);
                 break;
             case Request.Method.DELETE:
-                setBuilder(new ANRequest.DeleteRequestBuilder(request.getUrl()),request);
+                setBuilder(new ANRequest.DeleteRequestBuilder(request.getUrl()), request);
                 break;
             case Request.Method.PUT:
-                setBuilder(new ANRequest.PutRequestBuilder(request.getUrl()),request);
+                setBuilder(new ANRequest.PutRequestBuilder(request.getUrl()), request);
                 break;
             case Request.Method.PATCH:
-                setBuilder(new ANRequest.PatchRequestBuilder(request.getUrl()),request);
+                setBuilder(new ANRequest.PatchRequestBuilder(request.getUrl()), request);
                 break;
         }
     }
@@ -47,6 +48,10 @@ public class ServerApi extends BaseApi {
             rb.setOkHttpClient(new OkHttpClient.Builder()
                     .connectTimeout(request.getRequestTimeout(), TimeUnit.SECONDS)
                     .build());
+
+        //default config headers
+        if (!getConfig().getHeaders().isEmpty())
+            rb.addHeaders(getConfig().getHeaders());
 
         if (request.getTag() != null)
             rb.setTag(request.getTag());
@@ -59,38 +64,38 @@ public class ServerApi extends BaseApi {
         log("Request json: " + request.getRequestJson());
     }
 
-    private void setBuilder(ANRequest.GetRequestBuilder requestBuilder,final Request request) {
-        setCommonInfo(requestBuilder,request);
+    private void setBuilder(ANRequest.GetRequestBuilder requestBuilder, final Request request) {
+        setCommonInfo(requestBuilder, request);
 
         requestBuilder.build().getAsString(getStringRequestListener(request));
     }
 
-    private void setBuilder(ANRequest.PostRequestBuilder requestBuilder,final Request request) {
-        setCommonInfo(requestBuilder,request);
+    private void setBuilder(ANRequest.PostRequestBuilder requestBuilder, final Request request) {
+        setCommonInfo(requestBuilder, request);
         if (request.getRequestJson() != null)
             requestBuilder.addStringBody(request.getRequestJson().toString());
 
         requestBuilder.build().getAsString(getStringRequestListener(request));
     }
 
-    private void setBuilder(ANRequest.DeleteRequestBuilder requestBuilder,final Request request) {
-        setCommonInfo(requestBuilder,request);
+    private void setBuilder(ANRequest.DeleteRequestBuilder requestBuilder, final Request request) {
+        setCommonInfo(requestBuilder, request);
         if (request.getRequestJson() != null)
             requestBuilder.addStringBody(request.getRequestJson().toString());
 
         requestBuilder.build().getAsString(getStringRequestListener(request));
     }
 
-    private void setBuilder(ANRequest.PutRequestBuilder requestBuilder,final Request request) {
-        setCommonInfo(requestBuilder,request);
+    private void setBuilder(ANRequest.PutRequestBuilder requestBuilder, final Request request) {
+        setCommonInfo(requestBuilder, request);
         if (request.getRequestJson() != null)
             requestBuilder.addStringBody(request.getRequestJson().toString());
 
         requestBuilder.build().getAsString(getStringRequestListener(request));
     }
 
-    private void setBuilder(ANRequest.PatchRequestBuilder requestBuilder,final Request request) {
-        setCommonInfo(requestBuilder,request);
+    private void setBuilder(ANRequest.PatchRequestBuilder requestBuilder, final Request request) {
+        setCommonInfo(requestBuilder, request);
         if (request.getRequestJson() != null)
             requestBuilder.addStringBody(request.getRequestJson().toString());
 
