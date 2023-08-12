@@ -2,6 +2,7 @@ package ir.masterz.mansour.ez.serverapi;
 
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
@@ -22,6 +23,7 @@ public class Request {
     private SuccessCallback CustomCallback;
     private boolean Success;
     private int RequestTimeout;
+    private HashMap<String, String> Headers;
 
     public static class Method {
         public static final int GET = 0;
@@ -46,6 +48,7 @@ public class Request {
         RequestTimeout = 10;
         ResponseJson = new JsonObject();
         Success = false;
+        Headers = new HashMap<>();
     }
 
     public String getTag() {
@@ -120,6 +123,21 @@ public class Request {
         RequestTimeout = requestTimeout;
     }
 
+    public HashMap<String, String> getHeaders() {
+        return Headers;
+    }
+
+    public void setHeaders(HashMap<String, String> headers) {
+        Headers = headers;
+    }
+
+    public void addHeader(String key, String value) {
+        Headers.put(key, value);
+    }
+
+    public String getHeader(String key) {
+        return Headers.get(key);
+    }
 
     @Override
     public boolean equals(Object other) {

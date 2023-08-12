@@ -2,6 +2,8 @@ package ir.masterz.mansour.ez.serverapi;
 
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
+
 import ir.masterz.mansour.ez.serverapi.callback.CallBackRequestBuilt;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 
@@ -51,6 +53,16 @@ public class RequestBuilder {
 
     public RequestBuilder setRequestTimeout(int seconds) {
         request.setRequestTimeout(seconds);
+        return this;
+    }
+
+    public RequestBuilder addHeader(String key, String value) {
+        request.addHeader(key, value);
+        return this;
+    }
+
+    public RequestBuilder addHeaders(HashMap<String, String> headers) {
+        request.setHeaders(headers);
         return this;
     }
 
