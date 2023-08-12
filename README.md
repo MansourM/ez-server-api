@@ -86,34 +86,35 @@ public class G extends Application {
 ### Full kit
 
 ```java
-G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
-                .setMethod(Request.Method.POST)
-                .setRequestJason(new JsonBuilder("key1","value1").add("key2","value2").build())
-                .setRequestTimeout(10) //seconds
-                .setToken("public") //adds "token" to header
-                .setCustomCallback(new SerfApiCallback() {
-
-                    @Override
-                    public void onSuccess(String message, JsonObject response) {
-                        //response code is //200-300
+    G.API.request(UrlHelper.patch("http://192.168.1.22:8084/api/v1/app/ping"))
+        .setRequestJason(new JsonBuilder("key1", "value1").add("key2", "value2").build())
+        .setRequestTimeout(10) //seconds
+        .setHeaderAcceptJson() // adds "Accept" -> "application/json header
+        .setToken("public") //adds "token" to header
+        .addHeader("custom", "header")
+        .setCustomCallback(new SerfApiCallback() {
+            @Override
+            public void onSuccess(String message, JsonObject response) {
+                    //response code is //200-300
                     }
-                    @Override
-                    public void onFailure() {
-                        //no proper response
-                        //e.g. no internet or parse error
+            
+            @Override
+            public void onErrorMessage(String message, JsonObject response) {
+                    //response code is //400-500
                     }
-
-                    @Override
-                    public void onErrorMessage(String message, JsonObject response) {
-                        //response code is //400-500
+            
+            @Override
+            public void onResponse() {
+                    //request in finished
+                    //used for thins like loading(false)
                     }
-
-                    @Override
-                    public void onResponse() {
-                        //request in finished
-                        //used for thins like loading(false)
+            
+            @Override
+            public void onFailure() {
+                    //no proper response
+                    //e.g. no internet or parse error
                     }
-                });
+        });
 
 ```
 ### Short form with helpers
