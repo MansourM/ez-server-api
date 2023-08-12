@@ -53,6 +53,10 @@ public class ServerApi extends BaseApi {
         if (!getConfig().getHeaders().isEmpty())
             rb.addHeaders(getConfig().getHeaders());
 
+        //request headers
+        if (!request.getHeaders().isEmpty())
+            rb.addHeaders(request.getHeaders());
+
         if (request.getTag() != null)
             rb.setTag(request.getTag());
 

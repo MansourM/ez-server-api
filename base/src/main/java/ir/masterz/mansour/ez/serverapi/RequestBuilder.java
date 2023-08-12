@@ -61,11 +61,15 @@ public class RequestBuilder {
         return this;
     }
 
+    public RequestBuilder setHeaderAcceptJson() {
+        request.addHeader("Accept", "application/json");
+        return this;
+    }
+
     public RequestBuilder addHeaders(HashMap<String, String> headers) {
         request.setHeaders(headers);
         return this;
     }
-
 
     public void setCustomCallback(SuccessCallback customCallback) {
         request.setCustomCallback(customCallback);
