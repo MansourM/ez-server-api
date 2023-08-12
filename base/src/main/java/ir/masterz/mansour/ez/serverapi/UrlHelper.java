@@ -9,8 +9,23 @@ public class UrlHelper {
         method = methodId;
     }
 
-    public UrlHelper(String url) {
-        this.url = url;
-        method = Request.Method.POST;
+    public static UrlHelper get(String url) {
+        return new UrlHelper(url, Request.Method.GET);
+    }
+
+    public static UrlHelper post(String url) {
+        return new UrlHelper(url, Request.Method.POST);
+    }
+
+    public static UrlHelper delete(String url) {
+        return new UrlHelper(url, Request.Method.DELETE);
+    }
+
+    public static UrlHelper put(String url) {
+        return new UrlHelper(url, Request.Method.PUT);
+    }
+
+    public static UrlHelper patch(String url) {
+        return new UrlHelper(url, Request.Method.PATCH);
     }
 }

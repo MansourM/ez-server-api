@@ -9,6 +9,6 @@ import com.google.gson.JsonObject;
 
 public interface ErrorCallback {
 
-    void onErrorMessage(String message, JsonObject data);
+    void onErrorMessage(String message, JsonObject response);
 
 }

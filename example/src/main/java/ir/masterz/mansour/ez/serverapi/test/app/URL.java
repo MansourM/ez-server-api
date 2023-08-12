@@ -19,7 +19,7 @@ public class URL {
         }
 
         public static UrlHelper ping() {
-            return new UrlHelper(baseUrl() + "/ping", Request.Method.GET);
+            return UrlHelper.get(baseUrl() + "/ping");
         }
     }
 

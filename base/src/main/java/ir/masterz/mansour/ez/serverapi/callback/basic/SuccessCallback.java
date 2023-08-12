@@ -9,6 +9,6 @@ import com.google.gson.JsonObject;
 
 public interface SuccessCallback {
 
-    void onSuccess(String message, JsonObject data);
+    void onSuccess(String message, JsonObject response);
 
 }

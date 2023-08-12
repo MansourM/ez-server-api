@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
 import ir.masterz.mansour.ez.serverapi.Request;
+import ir.masterz.mansour.ez.serverapi.UrlHelper;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SeApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SerApiCallback;
@@ -59,7 +60,7 @@ public class FirstActivity extends AppCompatActivity {
         G.API.request("http://10.0.2.2:8081/test/malfored")
                 .setCustomCallback(new SuccessCallback() {
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
 
                     }
                 });
@@ -76,7 +77,7 @@ public class FirstActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
                         Log.d(TAG, "success");
                     }
                 });
@@ -120,7 +121,7 @@ public class FirstActivity extends AppCompatActivity {
         G.API.request(URL.SUCCESS_MESSAGE)
                 .setCustomCallback(new SuccessCallback() {
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
 
 
                     }
@@ -131,7 +132,7 @@ public class FirstActivity extends AppCompatActivity {
         G.API.request(URL.SUCCESS_MESSAGE_WITH_DATA)
                 .setCustomCallback(new SuccessCallback() {
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
 
 
                     }
@@ -143,7 +144,7 @@ public class FirstActivity extends AppCompatActivity {
         G.API.request(URL.ERROR_MESSAGE)
                 .setCustomCallback(new SuccessCallback() {
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
 
                     }
                 });
@@ -154,12 +155,12 @@ public class FirstActivity extends AppCompatActivity {
         G.API.request(URL.ERROR_MESSAGE_WITH_DATA)
                 .setCustomCallback(new SeApiCallback() {
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
 
                     }
 
                     @Override
-                    public void onErrorMessage(String message, JsonObject data) {
+                    public void onErrorMessage(String message, JsonObject response) {
                         G.message("Error handled from activity, msg: " + message);
                     }
                 });
@@ -171,12 +172,12 @@ public class FirstActivity extends AppCompatActivity {
                 .setRequestJason(new JsonBuilder().add("bracket_id", 1).build())
                 .setCustomCallback(new SeApiCallback() {
                     @Override
-                    public void onSuccess(String message, JsonObject data) {
+                    public void onSuccess(String message, JsonObject response) {
 
                     }
 
                     @Override
-                    public void onErrorMessage(String message, JsonObject data) {
+                    public void onErrorMessage(String message, JsonObject response) {
 
                     }
 
@@ -187,6 +188,39 @@ public class FirstActivity extends AppCompatActivity {
         Log.d(TAG, "test1");
         G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
                 .setMethod(Request.Method.POST)
+                .setRequestJason(new JsonBuilder("key1","value1").add("key2","value2").build())
+                .setRequestTimeout(10) //seconds
+                .setToken("public") //adds "token" to header
+                .setCustomCallback(new SerfApiCallback() {
+
+                    @Override
+                    public void onSuccess(String message, JsonObject response) {
+                        //response code is //200-300
+                    }
+                    @Override
+                    public void onFailure() {
+                        //no proper response
+                        //e.g. no internet or parse error
+                    }
+
+                    @Override
+                    public void onErrorMessage(String message, JsonObject response) {
+                        //response code is //400-500
+                    }
+
+                    @Override
+                    public void onResponse() {
+                        //request in finished
+                        //used for thins like loading(false)
+                    }
+                });
+
+
+    }
+
+    private void test4() {
+        Log.d(TAG, "test1");
+        G.API.request(UrlHelper.patch("http://192.168.1.22:8084/api/v1/app/ping"))
                 .setRequestJason(new JsonBuilder("key1","value1").add("key2","value2").build())
                 .setRequestTimeout(10) //seconds
                 .setToken("public") //adds "token" to header
