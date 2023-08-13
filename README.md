@@ -27,11 +27,11 @@ Add it in your root build.gradle at the end of repositories:
 ~"ion" uses[ ION](https://github.com/koush/ion " ION") for networking (more utility but needs google play service to work)~
 
 ##### Current Version
-[![](https://jitpack.io/v/MansourM/ez-server-api.svg)](https://jitpack.io/#MansourM/ez-server-api) `0.5.6` !
+[![](https://jitpack.io/v/MansourM/ez-server-api.svg)](https://jitpack.io/#MansourM/ez-server-api) `0.6.1` !
 
 #### examples
 
-    implementation 'com.github.MansourM.ez-server-api:fan:0.5.6'
+    implementation 'com.github.MansourM.ez-server-api:fan:0.6.1'
 <strike>
 
     implementation 'com.github.MansourM.ez-server-api:ion:0.1.5
@@ -45,8 +45,7 @@ public class G extends Application {
 
     public static Context APP_CONTEXT;
     public static ServerApi API;
-
-
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -54,8 +53,11 @@ public class G extends Application {
         APP_CONTEXT = getApplicationContext();
 
         API = new ServerApi(APP_CONTEXT);
-        API.getConfig().setLogging(true);
-        API.getConfig().setLoggingTag("Mansour_API");
+        API.getConfig()
+                .setLogging(true)
+                .setLoggingTag("Mansour_API")
+                .setHeaderAcceptJson();
+
         API.setErrorMessageHandler(new MyApiCallbackDefaultHandler());
 
     }
@@ -68,7 +70,7 @@ public class G extends Application {
 
         @Override
         public void handleErrorMessage(String message, JsonObject data) {
-            G.message("Default Error Message Handler, msg: " + message);
+            G.message("Server error: " + message);
         }
 
         @Override
@@ -86,7 +88,8 @@ public class G extends Application {
 ### Full kit
 
 ```java
-    G.API.request(UrlHelper.patch("http://192.168.1.22:8084/api/v1/app/ping"))
+    G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
+        .setMethod(Request.Method.GET)
         .setRequestJason(new JsonBuilder("key1", "value1").add("key2", "value2").build())
         .setRequestTimeout(10) //seconds
         .setHeaderAcceptJson() // adds "Accept" -> "application/json header
@@ -95,12 +98,12 @@ public class G extends Application {
         .setCustomCallback(new SerfApiCallback() {
             @Override
             public void onSuccess(String message, JsonObject response) {
-                    //response code is //200-300
+                    //response code is //200-299
                     }
             
             @Override
             public void onErrorMessage(String message, JsonObject response) {
-                    //response code is //400-500
+                    //response code is //400-499
                     }
             
             @Override
@@ -111,6 +114,7 @@ public class G extends Application {
             
             @Override
             public void onFailure() {
+                    // response code is 500+
                     //no proper response
                     //e.g. no internet or parse error
                     }
@@ -155,6 +159,9 @@ public class AR {
         public static UrlHelper ping() {
             return UrlHelper.get(baseUrl() + "/ping");
         }
+        public static UrlHelper sendCode() {
+            return UrlHelper.post("http://192.168.1.11:8084/api/v1/app/sendCode");
+        }
     }
 }
 
@@ -163,7 +170,8 @@ public class AR {
 `SomeActivity.java`
 
 ```java
-//There are custom callbacks based on what we need this one uses success callback (the only callback we can access in onSuccess, onError and onfailure use the default bahviour defined in G.java)
+//There are custom callbacks based on what we need this one uses success callback
+// (the only callback we can access in onSuccess, onError and onfailure use the default bahviour defined in G.java)
 G.API.request(AR.App.ping())
                 .setCustomCallback((message, response) -> {
                     

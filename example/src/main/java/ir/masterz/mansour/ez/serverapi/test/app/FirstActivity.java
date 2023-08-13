@@ -53,6 +53,8 @@ public class FirstActivity extends AppCompatActivity {
         findViewById(R.id.btn_test_1).setOnClickListener(v -> test1());
         findViewById(R.id.btn_test_2).setOnClickListener(v -> test2());
         findViewById(R.id.btn_test_3).setOnClickListener(v -> test3());
+        findViewById(R.id.btn_test_4).setOnClickListener(v -> test4());
+        findViewById(R.id.btn_test_5).setOnClickListener(v -> test5());
         //errorMessageWithData();
     }
 
@@ -185,7 +187,7 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void test3() {
-        Log.d(TAG, "test1");
+        Log.d(TAG, "test3");
         G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
                 .setMethod(Request.Method.POST)
                 .setRequestJason(new JsonBuilder("key1", "value1").add("key2", "value2").build())
@@ -220,8 +222,9 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void test4() {
-        Log.d(TAG, "test1");
-        G.API.request(UrlHelper.patch("http://192.168.1.22:8084/api/v1/app/ping"))
+        Log.d(TAG, "test4");
+        G.API.request("http://192.168.1.22:8084/api/v1/app/ping")
+                .setMethod(Request.Method.GET)
                 .setRequestJason(new JsonBuilder("key1", "value1").add("key2", "value2").build())
                 .setRequestTimeout(10) //seconds
                 .setHeaderAcceptJson() // adds "Accept" -> "application/json header
@@ -231,12 +234,12 @@ public class FirstActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(String message, JsonObject response) {
-                        //response code is //200-300
+                        //response code is //200-299
                     }
 
                     @Override
                     public void onErrorMessage(String message, JsonObject response) {
-                        //response code is //400-500
+                        //response code is //400-499
                     }
 
                     @Override
@@ -247,11 +250,26 @@ public class FirstActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure() {
+                        // response code is 500+
                         //no proper response
                         //e.g. no internet or parse error
                     }
                 });
+    }
 
+    private void test5() {
+        Log.d(TAG, "test5");
+        G.API.request(URL.App.sendCode())
+                .setRequestJason(new JsonBuilder("mobile", "09112223344").add("test", "t").build())
+                .setCustomCallback(new SrApiCallback() {
+                    @Override
+                    public void onResponse() {
 
+                    }
+
+                    @Override
+                    public void onSuccess(String message, JsonObject data) {
+                    }
+                });
     }
 }

@@ -35,4 +35,18 @@
         android:text="Test 3"
         android:textSize="16sp" />
 
+    <Button
+        android:id="@+id/btn_test_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test 4"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_test_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test 5"
+        android:textSize="16sp" />
+
 </LinearLayout>

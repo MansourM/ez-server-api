@@ -41,7 +41,7 @@ public class G extends Application {
 
         @Override
         public void handleErrorMessage(String message, JsonObject data) {
-            G.message("Default Error Message Handler, msg: " + message);
+            G.message("Server error: " + message);
         }
 
         @Override

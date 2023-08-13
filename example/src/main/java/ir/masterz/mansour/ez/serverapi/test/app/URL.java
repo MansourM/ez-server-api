@@ -21,6 +21,10 @@ public class URL {
         public static UrlHelper ping() {
             return UrlHelper.get(baseUrl() + "/ping");
         }
+
+        public static UrlHelper sendCode() {
+            return UrlHelper.post("http://192.168.1.11:8084/api/v1/app/sendCode");
+        }
     }
 
 }
