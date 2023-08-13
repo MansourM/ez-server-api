@@ -121,41 +121,53 @@ public abstract class BaseApi {
 
     //success or error message
     protected void onValidResponse() {
+        log("Valid response!");
         SuccessCallback callback = getCurrentRequest().getCustomCallback();
         String status = getCurrentRequest().getResponseJson().get("status").getAsString();
         String message = getCurrentRequest().getResponseJson().get("message").getAsString();
 
-        if (callback instanceof ResponseCallback)
+        if (callback instanceof ResponseCallback) {
+            log("calling onResponse");
             ((ResponseCallback) getCurrentRequest().getCustomCallback()).onResponse();
+        }
 
-        if (status.equals("success"))
+        if (status.equals("success")) {
+            log("calling onSuccess");
             onSuccess(callback,
                     message,
                     getCurrentRequest().getResponseJson()
             );
-        else
+        } else {
+            log("calling onError");
             onErrorMessage(
                     callback,
                     message,
                     getCurrentRequest().getResponseJson()
             );
+        }
 
         getCurrentRequest().success();
         processNextRequest();
     }
 
     protected void onResponseParseError() {
-        loge("Unable parse the response string!");
+        loge("Invalid Response: Unable parse the response string!");
 
         SuccessCallback callback = getCurrentRequest().getCustomCallback();
 
-        if (callback instanceof ResponseCallback)
+        if (callback instanceof ResponseCallback) {
+            log("calling onResponse");
             ((ResponseCallback) getCurrentRequest().getCustomCallback()).onResponse();
+        }
 
-        if (callback instanceof FailureCallback)
+        if (callback instanceof FailureCallback) {
+            log("calling onFailure");
             ((FailureCallback) getCurrentRequest().getCustomCallback()).onFailure();
-        else if (CallbackDefaultHandler != null)
+        }
+        else if (CallbackDefaultHandler != null) {
+            log("handling onFailure with default handler");
             CallbackDefaultHandler.handleFailure();
+        }
 
         processNextRequest();
     }
@@ -163,8 +175,10 @@ public abstract class BaseApi {
     protected void onErrorMessage(SuccessCallback callback, String message, JsonObject data) {
         if (callback instanceof ErrorCallback)
             ((ErrorCallback) getCurrentRequest().getCustomCallback()).onErrorMessage(message, data);
-        else if (CallbackDefaultHandler != null)
+        else if (CallbackDefaultHandler != null) {
+            log("handling onError with default handler");
             CallbackDefaultHandler.handleErrorMessage(message, data);
+        }
     }
 
 
@@ -173,6 +187,8 @@ public abstract class BaseApi {
     }
 
 
+    //TODO these will probably not happen, after digging deeper into this FAN doesn't seem to be worth it
+    //   maybe change the networking lib to retrofit or sth like that?
     //TODO: Using it with your own JAVA Object - JSON Parser
     //TODO: Image Upload
 }

@@ -42,7 +42,7 @@ public class RequestBuilder {
     }
 
     public RequestBuilder setToken(String token) {
-        request.setToken(token);
+        request.addHeader("Token", token);
         return this;
     }
 

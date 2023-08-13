@@ -17,7 +17,6 @@ public class Request {
 
     private int MethodId;
     private String Tag;
-    private String Token;
     private JsonObject RequestJson;
     private JsonObject ResponseJson;
     private SuccessCallback CustomCallback;
@@ -83,14 +82,6 @@ public class Request {
         MethodId = methodId;
     }
 
-    public String getToken() {
-        return Token;
-    }
-
-    public void setToken(String token) {
-        Token = token;
-    }
-
     public JsonObject getRequestJson() {
         return RequestJson;
     }
@@ -148,6 +139,6 @@ public class Request {
 
     @Override
     public int hashCode() {
-        return Objects.hash(RequestUrl, Tag, Token, RequestJson);
+        return Objects.hash(RequestUrl, Tag, RequestJson);
     }
 }
