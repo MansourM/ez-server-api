@@ -60,6 +60,20 @@ public class Config {
         return this;
     }
 
+    public void removeHeader(String key) {
+        Headers.remove(key);
+    }
+
+    public Config addBearerToken(String token) {
+        Headers.put("Authorization", "Bearer " + token);
+        return this;
+    }
+
+    public Config removeBearerToken() {
+        Headers.remove("Authorization");
+        return this;
+    }
+
     public String getHeader(String key) {
         return Headers.get(key);
     }

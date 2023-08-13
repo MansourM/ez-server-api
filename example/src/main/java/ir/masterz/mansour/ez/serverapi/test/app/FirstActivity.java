@@ -1,6 +1,5 @@
 package ir.masterz.mansour.ez.serverapi.test.app;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,14 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
 
-import java.util.Locale;
-
 import ir.masterz.mansour.ez.serverapi.JsonBuilder;
 import ir.masterz.mansour.ez.serverapi.Request;
-import ir.masterz.mansour.ez.serverapi.UrlHelper;
 import ir.masterz.mansour.ez.serverapi.callback.basic.SuccessCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SeApiCallback;
-import ir.masterz.mansour.ez.serverapi.callback.composit.SerApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SerfApiCallback;
 import ir.masterz.mansour.ez.serverapi.callback.composit.SrApiCallback;
 import ir.masterz.mansour.fan.core.AndroidNetworking;
@@ -170,7 +165,7 @@ public class FirstActivity extends AppCompatActivity {
 
     private void exmaple1() {
         G.API.request(URL.ERROR_MESSAGE)
-                .setToken("f47xgpoxozd8r9j4ueiog6behp2kziab90uebm45")
+                .addToken("f47xgpoxozd8r9j4ueiog6behp2kziab90uebm45")
                 .setRequestJason(new JsonBuilder().add("bracket_id", 1).build())
                 .setCustomCallback(new SeApiCallback() {
                     @Override
@@ -192,7 +187,7 @@ public class FirstActivity extends AppCompatActivity {
                 .setMethod(Request.Method.POST)
                 .setRequestJason(new JsonBuilder("key1", "value1").add("key2", "value2").build())
                 .setRequestTimeout(10) //seconds
-                .setToken("public") //adds "token" to header
+                .addToken("public") //adds "token" to header
                 .setCustomCallback(new SerfApiCallback() {
 
                     @Override
@@ -228,7 +223,8 @@ public class FirstActivity extends AppCompatActivity {
                 .setRequestJason(new JsonBuilder("key1", "value1").add("key2", "value2").build())
                 .setRequestTimeout(10) //seconds
                 .setHeaderAcceptJson() // adds "Accept" -> "application/json header
-                .setToken("public") //adds "token" to header
+                .addToken("public") //sets the value as "Token" header
+                .addBearerToken("bearer_token")// prepends "Bearer " to the value then sets it as "Authorization" header
                 .addHeader("custom", "header")
                 .setCustomCallback(new SerfApiCallback() {
 

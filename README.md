@@ -27,11 +27,11 @@ Add it in your root build.gradle at the end of repositories:
 ~"ion" uses[ ION](https://github.com/koush/ion " ION") for networking (more utility but needs google play service to work)~
 
 ##### Current Version
-[![](https://jitpack.io/v/MansourM/ez-server-api.svg)](https://jitpack.io/#MansourM/ez-server-api) `0.6.1` !
+[![](https://jitpack.io/v/MansourM/ez-server-api.svg)](https://jitpack.io/#MansourM/ez-server-api) `0.6.2` !
 
 #### examples
 
-    implementation 'com.github.MansourM.ez-server-api:fan:0.6.1'
+    implementation 'com.github.MansourM.ez-server-api:fan:0.6.2'
 <strike>
 
     implementation 'com.github.MansourM.ez-server-api:ion:0.1.5
@@ -93,7 +93,7 @@ public class G extends Application {
         .setRequestJason(new JsonBuilder("key1", "value1").add("key2", "value2").build())
         .setRequestTimeout(10) //seconds
         .setHeaderAcceptJson() // adds "Accept" -> "application/json header
-        .setToken("public") //adds "token" to header
+        .addToken("public") //adds value to "token" header
         .addHeader("custom", "header")
         .setCustomCallback(new SerfApiCallback() {
             @Override

@@ -41,11 +41,6 @@ public class RequestBuilder {
         return this;
     }
 
-    public RequestBuilder setToken(String token) {
-        request.addHeader("Token", token);
-        return this;
-    }
-
     public RequestBuilder setRequestJason(JsonObject requestJason) {
         request.setRequestJson(requestJason);
         return this;
@@ -63,6 +58,16 @@ public class RequestBuilder {
 
     public RequestBuilder setHeaderAcceptJson() {
         request.addHeader("Accept", "application/json");
+        return this;
+    }
+
+    public RequestBuilder addToken(String token) {
+        request.addHeader("Token", token);
+        return this;
+    }
+
+    public RequestBuilder addBearerToken(String token) {
+        request.addHeader("Authorization", "Bearer " + token);
         return this;
     }
 
