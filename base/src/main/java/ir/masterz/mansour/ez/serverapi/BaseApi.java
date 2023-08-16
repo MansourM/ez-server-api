@@ -191,4 +191,5 @@ public abstract class BaseApi {
     //   maybe change the networking lib to retrofit or sth like that?
     //TODO: Using it with your own JAVA Object - JSON Parser
     //TODO: Image Upload
+    //TODO: better quest / add que types?
 }
